@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>NPI_Must_Be_10_Digits</fullName>
+    <active>true</active>
+    <description>National Provider Number (NPI) must contain 10 digits.</description>
+    <errorConditionFormula>AND(RecordType.Name = &quot;Provider&quot;, NOT(ISBLANK(NPI__c)), NOT(ISNUMBER(NPI__c)))</errorConditionFormula>
+    <errorDisplayField>NPI__c</errorDisplayField>
+    <errorMessage>National Provider Number (NPI) must contain 10 digits.</errorMessage>
+</ValidationRule>
