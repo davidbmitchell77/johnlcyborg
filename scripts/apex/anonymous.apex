@@ -1,0 +1,1 @@
+System.debug(LoggingLevel.INFO, TriggerSetting__mdt.getInstance(Test.isRunningTest() ? 'Test' : 'Lead'));

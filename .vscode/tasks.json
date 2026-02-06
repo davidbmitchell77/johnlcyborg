@@ -1,0 +1,13 @@
+{
+   "version": "2.0.0",
+   "tasks": [
+      {
+         "label": "set default org",
+         "type": "shell",
+         "command": "~/.openssl/johnlcyborg/defaultOrg.sh",
+         "runOptions": {
+            "runOn": "folderOpen"
+         }
+      }
+   ]
+}
