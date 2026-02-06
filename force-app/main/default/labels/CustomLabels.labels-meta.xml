@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>DUPLICATE_LEAD_RECORD</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>DUPLICATE_LEAD_RECORD</shortDescription>
+        <value>This is a duplicate lead record.</value>
+    </labels>
+    <labels>
+        <fullName>ERROR_UPDATING_CARE_BENEFIT_VERIFY_REQUEST_RECORD</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>ERROR_UPDATING_CARE_BENEFIT_VERIFY_REQUEST_RECORD</shortDescription>
+        <value>Error updating Care Benefit Verify Request record.</value>
+    </labels>
+    <labels>
+        <fullName>LEAD_EMAIL_ADDRESS_IS_REQUIRED</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>LEAD_EMAIL_ADDRESS_IS_REQUIRED</shortDescription>
+        <value>Email address is required.</value>
+    </labels>
+    <labels>
+        <fullName>LEAD_LAST_NAME_IS_REQUIRED</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>LEAD_LAST_NAME_IS_REQUIRED</shortDescription>
+        <value>Last name is required.</value>
+    </labels>
+    <labels>
+        <fullName>LEAD_NAME_IS_REQUIRED</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>LEAD_NAME_IS_REQUIRED</shortDescription>
+        <value>Lead name is required.</value>
+    </labels>
+</CustomLabels>
