@@ -6,8 +6,10 @@
     <errorConditionFormula>AND(
   RecordType.Name = &quot;Provider&quot;,
   NOT(ISBLANK(NPI__c)),
-  NOT(ISNUMBER(NPI__c)),
-  NOT(REGEX(NPI__c, &quot;[0-9]{10}&quot;))
+  OR(
+    NOT(ISNUMBER(NPI__c)),
+    NOT(LEN(NPI__c) = 10)
+  )
 )</errorConditionFormula>
     <errorDisplayField>NPI__c</errorDisplayField>
     <errorMessage>National Provider Number (NPI) must contain 10 digits.</errorMessage>
