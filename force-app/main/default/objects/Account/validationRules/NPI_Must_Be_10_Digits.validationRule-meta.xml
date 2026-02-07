@@ -8,7 +8,8 @@
   NOT(ISBLANK(NPI__c)),
   OR(
     NOT(ISNUMBER(NPI__c)),
-    NOT(LEN(NPI__c) = 10)
+    NOT(LEN(NPI__c) = 10),
+    NOT(REGEX(NPI__c, &quot;[0-9]{10}&quot;))
   )
 )</errorConditionFormula>
     <errorDisplayField>NPI__c</errorDisplayField>
