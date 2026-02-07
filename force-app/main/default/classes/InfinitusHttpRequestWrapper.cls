@@ -1,9 +1,9 @@
 public class InfinitusHttpRequestWrapper {
-    public RequestDetails rd       { get; set; }
-    public PatientDetails pd       { get; set; }
-    public InsuranceInformation ii { get; set; }
-    public ProviderInformation pi  { get; set; }
-    public ServiceDetails sd       { get; set; }
+    public RequestDetails rd        { get; set; }
+    public PatientDetails pd        { get; set; }
+    public InsuranceInformation ii  { get; set; }
+    public ProviderInformation pi   { get; set; }
+    public ServiceDetails sd        { get; set; }
 
     public class RequestDetails {
         public String requestId     { get; set; }
