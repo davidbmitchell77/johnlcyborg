@@ -3,7 +3,12 @@
     <fullName>NPI_Must_Be_10_Digits</fullName>
     <active>true</active>
     <description>National Provider Number (NPI) must contain 10 digits.</description>
-    <errorConditionFormula>AND(RecordType.Name = &quot;Provider&quot;, NOT(ISBLANK(NPI__c)), NOT(ISNUMBER(NPI__c)))</errorConditionFormula>
+    <errorConditionFormula>AND(
+  RecordType.Name = &quot;Provider&quot;,
+  NOT(ISBLANK(NPI__c)),
+  NOT(ISNUMBER(NPI__c)),
+  NOT(REGEX(NPI__c, &quot;[0-9]{10}&quot;))
+)</errorConditionFormula>
     <errorDisplayField>NPI__c</errorDisplayField>
     <errorMessage>National Provider Number (NPI) must contain 10 digits.</errorMessage>
 </ValidationRule>
