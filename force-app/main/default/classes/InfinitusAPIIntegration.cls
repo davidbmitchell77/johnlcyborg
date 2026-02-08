@@ -7,7 +7,7 @@ public class InfinitusAPIIntegration {
         sendAsynchronous(cbvrIds[0]);
     }
 
-  //@future(callout=true)
+    @future(callout=true)
     public static void sendAsynchronous(Id cbvrId) {
         CareBenefitVerifyRequest__c cbvr = [SELECT Id, Name, Status__c, StatusReason__c FROM CareBenefitVerifyRequest__c WHERE Id = :cbvrId];
         httpRequest req = new HttpRequest();
