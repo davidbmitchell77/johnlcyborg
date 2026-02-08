@@ -79,6 +79,7 @@ public class InfinitusAPIIntegration {
                        PatientLastName__c,
                        PolicyNumber__c,
                        ProcedureCode__c,
+                       ProviderSalutation__c,
                        ProviderFirstName__c,
                        ProviderLastName__c,
                        ServiceDate__c,
