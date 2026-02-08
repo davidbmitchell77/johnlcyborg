@@ -50,6 +50,7 @@ public class InfinitusAPIIntegration {
         insuranceInformation.groupNumber  = cbvr.GroupNumber__c;
         insuranceInformation.subscriberId = cbvr.SubscriberId__c;
         providerInformation.npi           = cbvr.NPI__c;
+        providerInformation.salutation    = cbvr.ProviderSalutation__c;
         providerInformation.firstName     = cbvr.ProviderFirstName__c;
         providerInformation.lastName      = cbvr.ProviderLastName__c;
         serviceDetails.serviceType        = cbvr.ServiceType__c;

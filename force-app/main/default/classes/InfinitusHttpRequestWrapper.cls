@@ -26,6 +26,7 @@ public class InfinitusHttpRequestWrapper {
 
     public class pi {
         public String npi           { get; set; }
+        public String salutation    { get; set; }
         public String firstName     { get; set; }
         public String lastName      { get; set; }
     }
