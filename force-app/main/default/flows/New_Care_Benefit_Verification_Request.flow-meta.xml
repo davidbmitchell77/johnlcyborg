@@ -20,7 +20,7 @@
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <environments>Default</environments>
-    <interviewLabel>New Care Verification REquest {!$Flow.CurrentDateTime}</interviewLabel>
+    <interviewLabel>New Care Verification Request {!$Flow.CurrentDateTime}</interviewLabel>
     <label>New Care Benefit Verification Request</label>
     <processMetadataValues>
         <name>BuilderType</name>
@@ -50,9 +50,15 @@
             <targetReference>Send_Care_Verification_Request</targetReference>
         </connector>
         <inputAssignments>
+            <field>Account__c</field>
+            <value>
+                <elementReference>$Record.MasterDetailToAccount__r.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>DateOfBirth__c</field>
             <value>
-                <elementReference>$Record.CreatedBy.Account.DateOfBirth__c</elementReference>
+                <elementReference>$Record.MasterDetailToAccount__r.DateOfBirth__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -145,9 +151,6 @@
     <start>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <connector>
-            <targetReference>Create_Care_Verification_Request</targetReference>
-        </connector>
         <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
         <filterLogic>and</filterLogic>
         <filters>
@@ -159,6 +162,12 @@
         </filters>
         <object>ServiceDetail__c</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <scheduledPaths>
+            <connector>
+                <targetReference>Create_Care_Verification_Request</targetReference>
+            </connector>
+            <pathType>AsyncAfterCommit</pathType>
+        </scheduledPaths>
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>

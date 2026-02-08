@@ -76,7 +76,8 @@ public class InfinitusAPIIntegration {
                        ServiceType__c,
                        Status__c,
                        StatusReason__c,
-                       SubscriberId__c
+                       SubscriberId__c,
+                       LastModifiedDate
                   FROM CareBenefitVerifyRequest__c
                  WHERE Id IN :cbvrIds
         ][0];
