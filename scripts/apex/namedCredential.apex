@@ -13,6 +13,7 @@ else {
     System.debug(Logginglevel.ERROR, res.getStatusCode());
 }
 */
+/*
 ServiceDetail__c sd = [SELECT Id, Name, Status__c FROM ServiceDetail__c WHERE Status__c != 'Pending' LIMIT 1];
 sd.Status__c = 'Pending';
 for (Database.SaveResult sr : Database.update(new List<ServiceDetail__c>{ sd}, false)) {
@@ -23,3 +24,7 @@ for (Database.SaveResult sr : Database.update(new List<ServiceDetail__c>{ sd}, f
         throw new DMLException(System.Label.ERROR_UPDATING_CARE_BENEFIT_VERIFY_REQUEST_RECORD);
     }
 }
+*/
+
+Id cbvrId = [SELECT Id, Name FROM CareBenefitVerifyRequest__c LIMIT 1].Id;
+InfinitusAPIIntegration.send(new List<Id>{ cbvrId });

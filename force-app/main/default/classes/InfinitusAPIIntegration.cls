@@ -4,24 +4,29 @@ public class InfinitusAPIIntegration {
 
     @InvocableMethod(label='Send Care Benefit Verification Request' category='Infinitus' description='Send a Care Benefit Verification Request to Infinitus.')
     public static void send(List<Id> cbvrIds) {
-        CareBenefitVerifyRequest__c result = new CareBenefitVerifyRequest__c();
+        sendAsynchronous(cbvrIds[0]);
+    }
+
+    @future(callout=true)
+    public static void sendAsynchronous(Id cbvrId) {
+        CareBenefitVerifyRequest__c cbvr = [SELECT Id, Name, Status__c, StatusReason__c FROM CareBenefitVerifyRequest__c WHERE Id = :cbvrId];
         httpRequest req = new HttpRequest();
         req.setEndpoint('callout:Infinitus/benefit-verification-request');
         req.setMethod('POST');
         req.setHeader('Content-Type', 'application/json');
-        req.setBody(stringify(cbvRequest(cbvrIds)));
+        req.setBody(stringify(cbvRequest(cbvrId)));
         HttpResponse res = new Http().send(req);
         if (res.getStatusCode() == 200) {
             InfinitusHttpResponseWrapper wrapper = InfinitusHttpResponseWrapper.parse(res.getBody());
-            result.Status__c = wrapper.status;
-            result.StatusReason__c = wrapper.statusReason;
-            updateCBVRecord(result);
+            cbvr.Status__c = wrapper.status;
+            cbvr.StatusReason__c = wrapper.statusReason;
+            updateCBVRecord(cbvr);
             System.debug(Logginglevel.INFO, (className + ': ' + res.getStatusCode() + '|' + description(res.getStatusCode())));
         }
         else {
-            result.Status__c = String.valueOf(res.getStatusCode());
-            result.StatusReason__c = (res.getStatusCode() + '|' + description(res.getStatusCode()));
-            System.debug(Logginglevel.ERROR, (className + ': ' + result.StatusReason__c));
+            cbvr.Status__c = String.valueOf(res.getStatusCode());
+            cbvr.StatusReason__c = (res.getStatusCode() + '|' + description(res.getStatusCode()));
+            System.debug(Logginglevel.ERROR, (className + ': ' + cbvr.StatusReason__c));
         }
     }
 
@@ -55,10 +60,11 @@ public class InfinitusAPIIntegration {
         wrapper.pi                        = providerInformation;
         wrapper.sd                        = serviceDetails;
         result                            = System.JSON.serialize(wrapper);
+        System.debug(Logginglevel.INFO, System.JSON.serializePretty(result));
         return result;
     }
 
-    private static CareBenefitVerifyRequest__c cbvRequest(List<Id> cbvrIds) {
+    private static CareBenefitVerifyRequest__c cbvRequest(Id cbvrId) {
         return [SELECT Name,
                        DateOfBirth__c,
                        DiagnosisCode__c,
@@ -79,8 +85,9 @@ public class InfinitusAPIIntegration {
                        SubscriberId__c,
                        LastModifiedDate
                   FROM CareBenefitVerifyRequest__c
-                 WHERE Id IN :cbvrIds
-        ][0];
+                 WHERE Id = :cbvrId
+                 LIMIT 1
+        ];
     }
 
     private static void updateCBVRecord(CareBenefitVerifyRequest__c cbvRecord) {
@@ -115,5 +122,9 @@ public class InfinitusAPIIntegration {
             when else { result = 'UNKNOWN STATUS CODE';   }
         }
         return result;
+    }
+
+    public static Boolean isFlow() {
+        return (Request.getCurrent().getQuiddity() == Quiddity.FUTURE);
     }
 }

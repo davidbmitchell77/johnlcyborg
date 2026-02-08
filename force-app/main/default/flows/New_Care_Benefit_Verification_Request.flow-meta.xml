@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
-        <name>Send_Care_Verification_Request</name>
-        <label>Send Care Verification Request</label>
+        <name>Send_Care_Benefit_Verification_Request</name>
+        <label>Send Care Benefit Verification Request</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <actionName>InfinitusAPIIntegration</actionName>
@@ -11,7 +11,7 @@
         <inputParameters>
             <name>cbvrIds</name>
             <value>
-                <elementReference>Create_Care_Verification_Request.Id</elementReference>
+                <elementReference>New_Care_Benefit_Verification_Request.Id</elementReference>
             </value>
         </inputParameters>
         <nameSegment>InfinitusAPIIntegration</nameSegment>
@@ -20,7 +20,7 @@
     <apiVersion>65.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <environments>Default</environments>
-    <interviewLabel>New Care Verification Request {!$Flow.CurrentDateTime}</interviewLabel>
+    <interviewLabel>New Care Benefit Verification Request {!$Flow.CurrentDateTime}</interviewLabel>
     <label>New Care Benefit Verification Request</label>
     <processMetadataValues>
         <name>BuilderType</name>
@@ -42,12 +42,12 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordCreates>
-        <name>Create_Care_Verification_Request</name>
-        <label>Create Care Verification Request</label>
+        <name>New_Care_Benefit_Verification_Request</name>
+        <label>New Care Benefit Verification Request</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Send_Care_Verification_Request</targetReference>
+            <targetReference>Send_Care_Benefit_Verification_Request</targetReference>
         </connector>
         <inputAssignments>
             <field>Account__c</field>
@@ -151,6 +151,9 @@
     <start>
         <locationX>0</locationX>
         <locationY>0</locationY>
+        <connector>
+            <targetReference>New_Care_Benefit_Verification_Request</targetReference>
+        </connector>
         <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
         <filterLogic>and</filterLogic>
         <filters>
@@ -162,12 +165,6 @@
         </filters>
         <object>ServiceDetail__c</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
-        <scheduledPaths>
-            <connector>
-                <targetReference>Create_Care_Verification_Request</targetReference>
-            </connector>
-            <pathType>AsyncAfterCommit</pathType>
-        </scheduledPaths>
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
