@@ -7,7 +7,7 @@ public class InfinitusAPIIntegration {
         sendAsynchronous(cbvrIds[0]);
     }
 
-    @future(callout=true)
+  //@future(callout=true)
     public static void sendAsynchronous(Id cbvrId) {
         CareBenefitVerifyRequest__c cbvr = [SELECT Id, Name, Status__c, StatusReason__c FROM CareBenefitVerifyRequest__c WHERE Id = :cbvrId];
         httpRequest req = new HttpRequest();
@@ -32,16 +32,17 @@ public class InfinitusAPIIntegration {
 
     private static String stringify(CareBenefitVerifyRequest__c cbvr) {
         String result = '';
-        InfinitusHttpRequestWrapper.RequestDetails requestDetails = new InfinitusHttpRequestWrapper.RequestDetails();
-        InfinitusHttpRequestWrapper.PatientDetails patientDetails = new InfinitusHttpRequestWrapper.PatientDetails();
-        InfinitusHttpRequestWrapper.InsuranceInformation insuranceInformation = new InfinitusHttpRequestWrapper.InsuranceInformation();
-        InfinitusHttpRequestWrapper.ProviderInformation providerInformation = new InfinitusHttpRequestWrapper.ProviderInformation();
-        InfinitusHttpRequestWrapper.ServiceDetails serviceDetails = new InfinitusHttpRequestWrapper.ServiceDetails();
+        InfinitusHttpRequestWrapper.rd requestDetails = new InfinitusHttpRequestWrapper.rd();
+        InfinitusHttpRequestWrapper.pd patientDetails = new InfinitusHttpRequestWrapper.pd();
+        InfinitusHttpRequestWrapper.ii insuranceInformation = new InfinitusHttpRequestWrapper.ii();
+        InfinitusHttpRequestWrapper.pi providerInformation = new InfinitusHttpRequestWrapper.pi();
+        InfinitusHttpRequestWrapper.sd serviceDetails = new InfinitusHttpRequestWrapper.sd();
         InfinitusHttpRequestWrapper wrapper = new InfinitusHttpRequestWrapper();
         requestDetails.requestId          = cbvr.Name;
         requestDetails.requestDate        = cbvr.LastModifiedDate.format(yyyymmdd);
         patientDetails.firstName          = cbvr.PatientFirstName__c;
         patientDetails.lastName           = cbvr.PatientLastName__c;
+        patientDetails.gender             = cbvr.Gender__c;
         patientDetails.dateOfBirth        = ((Datetime)cbvr.DateOfBirth__c).format(yyyymmdd);
         insuranceInformation.providerName = cbvr.InsuranceProvider__c;
         insuranceInformation.policyNumber = cbvr.PolicyNumber__c;
@@ -54,11 +55,11 @@ public class InfinitusAPIIntegration {
         serviceDetails.serviceDate        = ((Datetime)cbvr.ServiceDate__c).format(yyyymmdd);
         serviceDetails.diagnosisCode      = cbvr.DiagnosisCode__c;
         serviceDetails.procedureCode      = cbvr.ProcedureCode__c;
-        wrapper.rd                        = requestDetails;
-        wrapper.pd                        = patientDetails;
-        wrapper.ii                        = insuranceInformation;
-        wrapper.pi                        = providerInformation;
-        wrapper.sd                        = serviceDetails;
+        wrapper.RequestDetails            = requestDetails;
+        wrapper.PatientDetails            = patientDetails;
+        wrapper.InsuranceInformation      = insuranceInformation;
+        wrapper.ProviderInformation       = providerInformation;
+        wrapper.ServiceDetails            = serviceDetails;
         result                            = System.JSON.serialize(wrapper);
         System.debug(Logginglevel.INFO, System.JSON.serializePretty(result));
         return result;
@@ -122,9 +123,5 @@ public class InfinitusAPIIntegration {
             when else { result = 'UNKNOWN STATUS CODE';   }
         }
         return result;
-    }
-
-    public static Boolean isFlow() {
-        return (Request.getCurrent().getQuiddity() == Quiddity.FUTURE);
     }
 }
