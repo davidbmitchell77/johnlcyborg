@@ -21,7 +21,8 @@ public class InfinitusAPIIntegration {
             cbvr.Status__c = wrapper.status;
             cbvr.StatusReason__c = wrapper.statusReason;
             updateCBVRecord(cbvr);
-            System.debug(Logginglevel.INFO, (className + ': ' + res.getStatusCode() + '|' + description(res.getStatusCode())));
+            System.debug(Logginglevel.INFO, ('HTTP STATUS: ' + res.getStatusCode()));
+            System.debug(Logginglevel.INFO, System.JSON.serializePretty(wrapper));
         }
         else {
             cbvr.Status__c = String.valueOf(res.getStatusCode());
@@ -60,8 +61,8 @@ public class InfinitusAPIIntegration {
         wrapper.InsuranceInformation      = insuranceInformation;
         wrapper.ProviderInformation       = providerInformation;
         wrapper.ServiceDetails            = serviceDetails;
-        result                            = System.JSON.serialize(wrapper);
-        System.debug(Logginglevel.INFO, System.JSON.serializePretty(result));
+        result                            = System.JSON.serializePretty(wrapper);
+        System.debug(Logginglevel.INFO, result);
         return result;
     }
 
