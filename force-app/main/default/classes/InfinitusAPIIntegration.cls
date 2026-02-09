@@ -27,6 +27,7 @@ public class InfinitusAPIIntegration {
         else {
             cbvr.Status__c = String.valueOf(res.getStatusCode());
             cbvr.StatusReason__c = (res.getStatusCode() + '|' + description(res.getStatusCode()));
+            updateCBVRecord(cbvr);
             System.debug(Logginglevel.ERROR, (className + ': ' + cbvr.StatusReason__c));
         }
     }
@@ -94,6 +95,7 @@ public class InfinitusAPIIntegration {
         ];
     }
 
+    @TestVisible
     private static void updateCBVRecord(CareBenefitVerifyRequest__c cbvRecord) {
         for (Database.SaveResult sr : Database.update(new List<CareBenefitVerifyRequest__c>{ cbvRecord }, false)) {
             if (!sr.isSuccess()) {
