@@ -17,8 +17,8 @@ global class InfinitusHttpResponseGenerator implements HttpCalloutMock {
 
     private String jsonBody() {
         InfinitusHttpResponseWrapper wrapper = new InfinitusHttpResponseWrapper();
-        wrapper.status       = this.statusCode == 200 ? 'Acknowledged' : 'Rejected';
-        wrapper.statusReason = this.statusCode == 200 ? 'Acknowledged' : 'Bad request';
+        wrapper.status       = ((this.statusCode == 200) ? 'Acknowledged' : 'Rejected');
+        wrapper.statusReason = ((this.statusCode == 200) ? 'Acknowledged' : 'Bad request');
         return System.JSON.serializePretty(wrapper);
     }
 }
