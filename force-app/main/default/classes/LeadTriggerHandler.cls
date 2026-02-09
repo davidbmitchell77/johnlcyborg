@@ -29,7 +29,7 @@ public class LeadTriggerHandler {
     public void run(List<Lead> oldLeads, List<Lead> newLeads, Map<Id,Lead> oldMap, Map<Id,Lead> newMap) {
          switch on this.operationType {
              when BEFORE_INSERT {
-                checkForDuplicateLeads(oldLeads, newLeads, oldMap, newMap);
+                checkForDuplicateLeads(null, newLeads, null, newMap);
              }
              when BEFORE_UPDATE {
                 checkForDuplicateLeads(oldLeads, newLeads, oldMap, newMap);
