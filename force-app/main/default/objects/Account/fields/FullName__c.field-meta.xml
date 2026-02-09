@@ -2,7 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>FullName__c</fullName>
     <externalId>false</externalId>
-    <formula>TRIM(TEXT(Salutation__c) + &quot; &quot; + FirstName__c + &quot; &quot; + LastName__c)</formula>
+    <formula>TRIM(TEXT(Salutation__c) + &quot; &quot; + FirstName__c + &quot; &quot; + LastName__c) + IF(NOT(ISBLANK(TEXT(ProviderSuffix__c))), &quot;, &quot; + TEXT(ProviderSuffix__c),&quot;&quot;)</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>Full Name</label>
     <required>false</required>
