@@ -4,7 +4,13 @@ public class InfinitusAPIIntegration {
 
     @InvocableMethod(label='Send Care Benefit Verification Request' category='Infinitus' description='Send a Care Benefit Verification Request to Infinitus.')
     public static void send(List<Id> cbvrIds) {
-        sendAsynchronous(cbvrIds[0]);
+        if (cbvrIds != null) {
+            for (Id cbvrId : cbvrIds) {
+                if (cbvrId != null) {
+                    sendAsynchronous(cbvrId);
+                }
+            }
+        }
     }
 
     @future(callout=true)
