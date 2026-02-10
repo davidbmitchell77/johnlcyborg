@@ -155,7 +155,7 @@
     <externalSharingModel>ControlledByParent</externalSharingModel>
     <label>Service Detail</label>
     <nameField>
-        <displayFormat>SD{000000}</displayFormat>
+        <displayFormat>SD-{000000}</displayFormat>
         <label>Service Detail Name</label>
         <type>AutoNumber</type>
     </nameField>
