@@ -22,13 +22,14 @@ public class InfinitusAPIIntegration {
             cbvr.Status__c = wrapper.status;
             cbvr.StatusReason__c = wrapper.statusReason;
             updateCBVRecord(cbvr);
-            System.debug(Logginglevel.INFO, ('HTTP STATUS: ' + res.getStatusCode()));
+            System.debug(Logginglevel.INFO, ('HTTP_STATUS: ' + res.getStatusCode()));
             System.debug(Logginglevel.INFO, System.JSON.serializePretty(wrapper));
         }
         else {
             cbvr.Status__c = String.valueOf(res.getStatusCode());
             cbvr.StatusReason__c = (res.getStatusCode() + '|' + description(res.getStatusCode()));
             updateCBVRecord(cbvr);
+            System.debug(Logginglevel.ERROR, ('HTTP_STATUS: ' + res.getStatusCode()));
             System.debug(Logginglevel.ERROR, (className + ': ' + cbvr.StatusReason__c));
         }
     }
