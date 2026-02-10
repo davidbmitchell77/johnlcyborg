@@ -15,7 +15,7 @@ public class InfinitusAPIIntegration {
         req.setMethod('POST');
         req.setHeader('Content-Type', 'application/json');
         req.setBody(stringify(cbvRequest(cbvrId)));
-        req.setTimeout(30000);
+        req.setTimeout(10000);
         HttpResponse res = new Http().send(req);
         if (res.getStatusCode() == 200) {
             InfinitusHttpResponseWrapper wrapper = InfinitusHttpResponseWrapper.parse(res.getBody());
