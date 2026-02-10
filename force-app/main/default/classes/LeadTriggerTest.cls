@@ -1,5 +1,5 @@
 @isTest
-private class LeadTriggerHandlerTest {
+private class LeadTriggerTest {
     @TestSetup
     private static void dataFactory(){
         Lead l = new Lead(
@@ -65,7 +65,7 @@ private class LeadTriggerHandlerTest {
             update l;
         }
         catch(Exception e) {
-            System.debug(LoggingLevel.ERROR, ('LeadTriggerHandlerTest.test03: ' + e.getMessage()));
+            System.debug(LoggingLevel.ERROR, ('LeadTriggerTest.test03: ' + e.getMessage()));
         }
         Test.stopTest();
         List<Lead> leads = [SELECT Id, LastName, Email FROM Lead];
