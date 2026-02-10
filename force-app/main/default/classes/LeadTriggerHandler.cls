@@ -29,7 +29,7 @@ public class LeadTriggerHandler {
     public void run(List<Lead> oldLeads, List<Lead> newLeads, Map<Id,Lead> oldMap, Map<Id,Lead> newMap) {
          switch on this.operationType {
              when BEFORE_INSERT {
-                checkForDuplicateLeads(null, newLeads, null, newMap);
+                checkForDuplicateLeads(null, newLeads, null, null);
              }
              when BEFORE_UPDATE {
                 checkForDuplicateLeads(oldLeads, newLeads, oldMap, newMap);
@@ -58,6 +58,7 @@ public class LeadTriggerHandler {
         for (Lead l : [SELECT Id, LastName, Email, OwnerId
                          FROM Lead
                         WHERE (LastName IN :lastNames(newLeads) OR Email IN :emailAddresses(newLeads))
+                          AND (NOT Id IN :leadIds(newLeads))
         ]) {
             duplicates.put((l.Email + '|' + l.LastName).toLowerCase(), l);
         }
@@ -95,6 +96,20 @@ public class LeadTriggerHandler {
                 if (!String.isBlank(l.LastName)) {
                     if (!results.contains(l.LastName.toLowerCase())) {
                         results.add(l.LastName.toLowerCase());
+                    }
+                }
+            }
+        }
+        return results;
+    }
+
+    private Set<Id> leadIds(List<Lead> leads) {
+        Set<Id> results = new Set<Id>();
+        if (leads != null) {
+            for (Lead l : leads) {
+                if (l.Id != null) {
+                    if (!results.contains(l.Id)) {
+                        results.add(l.Id);
                     }
                 }
             }
