@@ -4,7 +4,7 @@
     <deleteConstraint>SetNull</deleteConstraint>
     <label>Member Plan</label>
     <referenceTo>MemberPlan__c</referenceTo>
-    <relationshipLabel>Member Plans</relationshipLabel>
+    <relationshipLabel>Plan Members</relationshipLabel>
     <relationshipName>MemberPlan</relationshipName>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>
