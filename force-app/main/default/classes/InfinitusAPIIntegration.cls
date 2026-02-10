@@ -16,7 +16,7 @@ public class InfinitusAPIIntegration {
     @future(callout=true)
     public static void sendAsynchronous(Id cbvrId) {
         CareBenefitVerifyRequest__c cbvr = [SELECT Id, Name, Status__c, StatusReason__c FROM CareBenefitVerifyRequest__c WHERE Id = :cbvrId];
-        httpRequest req = new HttpRequest();
+        HttpRequest req = new HttpRequest();
         req.setEndpoint('callout:Infinitus/benefit-verification-request');
         req.setMethod('POST');
         req.setHeader('Content-Type', 'application/json');
