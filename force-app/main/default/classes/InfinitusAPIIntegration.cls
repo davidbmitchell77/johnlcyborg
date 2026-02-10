@@ -28,15 +28,15 @@ public class InfinitusAPIIntegration {
             cbvr.Status__c = wrapper.status;
             cbvr.StatusReason__c = wrapper.statusReason;
             updateCBVRecord(cbvr);
-            System.debug(Logginglevel.INFO, ('HTTP_STATUS: ' + res.getStatusCode()));
-            System.debug(Logginglevel.INFO, System.JSON.serializePretty(wrapper));
+            System.debug(LoggingLevel.INFO, ('HTTP_STATUS: ' + res.getStatusCode()));
+            System.debug(LoggingLevel.INFO, System.JSON.serializePretty(wrapper));
         }
         else {
             cbvr.Status__c = String.valueOf(res.getStatusCode());
             cbvr.StatusReason__c = (res.getStatusCode() + '|' + description(res.getStatusCode()));
             updateCBVRecord(cbvr);
-            System.debug(Logginglevel.ERROR, ('HTTP_STATUS: ' + res.getStatusCode()));
-            System.debug(Logginglevel.ERROR, (className + ': ' + cbvr.StatusReason__c));
+            System.debug(LoggingLevel.ERROR, ('HTTP_STATUS: ' + res.getStatusCode()));
+            System.debug(LoggingLevel.ERROR, (className + ': ' + cbvr.StatusReason__c));
         }
     }
 
@@ -72,7 +72,7 @@ public class InfinitusAPIIntegration {
         wrapper.ProviderInformation       = providerInformation;
         wrapper.ServiceDetails            = serviceDetails;
         result                            = System.JSON.serializePretty(wrapper);
-        System.debug(Logginglevel.INFO, result);
+        System.debug(LoggingLevel.INFO, result);
         return result;
     }
 
@@ -108,7 +108,7 @@ public class InfinitusAPIIntegration {
         for (Database.SaveResult sr : Database.update(new List<CareBenefitVerifyRequest__c>{ cbvRecord }, false)) {
             if (!sr.isSuccess()) {
                 for (Database.Error e : sr.getErrors()) {
-                    System.debug(Logginglevel.ERROR, (className + ': ' + e.getStatusCode() + '|' + e.getMessage()));
+                    System.debug(LoggingLevel.ERROR, (className + ': ' + e.getStatusCode() + '|' + e.getMessage()));
                 }
                 throw new DMLException(System.Label.ERROR_UPDATING_CARE_BENEFIT_VERIFY_REQUEST_RECORD);
             }
