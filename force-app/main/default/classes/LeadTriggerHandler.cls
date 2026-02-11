@@ -27,29 +27,28 @@ public class LeadTriggerHandler {
     }
 
     public void run(List<Lead> oldLeads, List<Lead> newLeads, Map<Id,Lead> oldMap, Map<Id,Lead> newMap) {
-         switch on this.operationType {
-             when BEFORE_INSERT {
+        switch on this.operationType {
+            when BEFORE_INSERT {
                 checkForDuplicateLeads(null, newLeads, null, null);
-             }
-             when BEFORE_UPDATE {
+            }
+            when BEFORE_UPDATE {
                 checkForDuplicateLeads(oldLeads, newLeads, oldMap, newMap);
-             }
-             when BEFORE_DELETE {
+            }
+            when BEFORE_DELETE {
 
-             }
-             when AFTER_INSERT {
+            }
+            when AFTER_INSERT {
 
-             }
-             when AFTER_UPDATE {
+            }
+            when AFTER_UPDATE {
 
-             }
-             when AFTER_DELETE {
+            }
+            when AFTER_DELETE {
 
-             }
-             when AFTER_UNDELETE {
-
-             }
-         }
+            }
+            when AFTER_UNDELETE {
+            }
+        }
     }
 
     private void checkForDuplicateLeads(List<Lead> oldLeads, List<Lead> newLeads, Map<Id,Lead> oldMap, Map<Id,Lead> newMap) {
