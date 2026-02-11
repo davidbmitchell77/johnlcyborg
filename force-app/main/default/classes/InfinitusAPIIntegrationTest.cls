@@ -52,6 +52,7 @@ private class InfinitusAPIIntegrationTest {
         List<CareBenefitVerifyRequest__c> cbvRequests = [SELECT Id, Name, Status__c, StatusReason__c FROM CareBenefitVerifyRequest__c];
         System.assertEquals(1, cbvRequests.size());
         System.assertEquals('Acknowledged', cbvRequests[0].Status__c);
+        System.assertEquals(1, [SELECT COUNT() FROM CareBenefitVerification__c WHERE CareBenefitVerificationRequest__c = :cbvRequests[0].Id]);
     }
 
     @isTest
