@@ -52,7 +52,7 @@ public class LeadTriggerHandler {
          }
     }
 
-    public void checkForDuplicateLeads(List<Lead> oldLeads, List<Lead> newLeads, Map<Id,Lead> oldMap, Map<Id,Lead> newMap) {
+    private void checkForDuplicateLeads(List<Lead> oldLeads, List<Lead> newLeads, Map<Id,Lead> oldMap, Map<Id,Lead> newMap) {
         Map<String,Lead> duplicates = new Map<String,Lead>();
 
         for (Lead l : [SELECT Id, LastName, Email, OwnerId
