@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CareBenefitVerificationRequest__c</fullName>
+    <deleteConstraint>Restrict</deleteConstraint>
+    <label>Care Benefit Verification Request</label>
+    <referenceTo>CareBenefitVerifyRequest__c</referenceTo>
+    <relationshipLabel>Care Benefit Verifications Requests</relationshipLabel>
+    <relationshipName>Care_Benefit_Verifications</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>
