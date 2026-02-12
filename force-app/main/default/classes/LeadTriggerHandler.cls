@@ -1,4 +1,4 @@
-public class LeadTriggerHandler {
+public with sharing class LeadTriggerHandler {
     private final TriggerOperation operationType;
     private final String className;
     private final String userIdPrefix;
@@ -59,6 +59,7 @@ public class LeadTriggerHandler {
                          FROM Lead
                         WHERE (LastName IN :lastNames(newLeads) OR Email IN :emailAddresses(newLeads))
                           AND (NOT Id IN :leadIds(newLeads))
+                         WITH SYSTEM_MODE
         ]) {
             duplicates.put((l.Email + '|' + l.LastName).toLowerCase(), l);
         }
