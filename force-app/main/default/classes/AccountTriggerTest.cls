@@ -3,17 +3,17 @@ private class AccountTriggerTest {
     @TestSetup
     private static void dataFactory() {
         user u = new User(
-            FirstName = 'Test',
-            LastName = 'User',
-            Username = ('test.user' + DateTime.now().getTime() + '@foobar.com').toLowerCase(),
-            Alias          = 'test',
-            Email = 'test.user@foobar.com',
-            ProfileId = [SELECT Id FROM Profile WHERE Name = 'Standard User'].Id,
-            EmailEncodingKey = 'UTF-8',
-            TimeZoneSidKey = 'America/Los_Angeles',
+            FirstName         = 'Test',
+            LastName          = 'User',
+            Username          = ('test.user' + DateTime.now().getTime() + '@foobar.com').toLowerCase(),
+            Alias             = 'test',
+            Email             = 'test.user@foobar.com',
+            ProfileId         = [SELECT Id FROM Profile WHERE Name = 'Standard User'].Id,
+            EmailEncodingKey  = 'UTF-8',
+            TimeZoneSidKey    = 'America/Los_Angeles',
             LanguageLocaleKey = 'en_US',
-            LocaleSidKey = 'en_US',
-            IsActive = true
+            LocaleSidKey      = 'en_US',
+            IsActive          = true
         );
         insert u;
         Account a = new Account(
