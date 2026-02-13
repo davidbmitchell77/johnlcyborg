@@ -4,7 +4,7 @@ public with sharing class AccountTriggerHandler {
 
     public AccountTriggerHandler(TriggerOperation to) {
         this.operationType = to;
-        this.className = 'AccountTriggerHandler';
+        this.className     = 'AccountTriggerHandler';
     }
 
     public Boolean isValid(List<Account> accounts) {
