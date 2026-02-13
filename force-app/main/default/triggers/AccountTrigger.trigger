@@ -1,27 +1,28 @@
 trigger AccountTrigger on Account (before insert, before update, before delete, after insert, after update, after delete, after undelete) {
+    TriggerSetting__mdt ts = TriggerSetting__mdt.getInstance(Test.isRunningTest() ? 'Test' : 'Account');
     Boolean runTriggerHandler = false;
 
     switch on Trigger.operationType {
         when BEFORE_INSERT {
-            runTriggerHandler = false;
+            runTriggerHandler = ts.BeforeInsert__c;
         }
         when BEFORE_UPDATE {
-            runTriggerHandler = false;
+            runTriggerHandler = ts.BeforeUpdate__c;
         }
         when BEFORE_DELETE {
-            runTriggerHandler = false;
+            runTriggerHandler = ts.BeforeDelete__c;
         }
         when AFTER_INSERT {
-            runTriggerHandler = false;
+            runTriggerHandler = ts.AfterInsert__c;
         }
         when AFTER_UPDATE {
-            runTriggerHandler = true;
+            runTriggerHandler = ts.AfterUpdate__c;
         }
         when AFTER_DELETE {
-            runTriggerHandler = false;
+            runTriggerHandler = ts.AfterDelete__c;
         }
         when AFTER_UNDELETE {
-            runTriggerHandler = false;
+            runTriggerHandler = ts.AfterUndelete__c;
         }
     }
 
