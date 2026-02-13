@@ -55,4 +55,15 @@ private class AccountTriggerTest {
             System.assertEquals(c.ownerId, u.Id);
         }
     }
+
+    @isTest
+     private static void test02() {
+        Account a = [SELECT Id, Name, OwnerId FROM Account LIMIT 1];
+        Test.startTest();
+        delete a;
+        System.assertEquals(0, [SELECT COUNT() FROM Account]);
+        undelete a;
+        System.assertEquals(1, [SELECT COUNT() FROM Account]);
+        Test.stopTest();
+    }
 }
