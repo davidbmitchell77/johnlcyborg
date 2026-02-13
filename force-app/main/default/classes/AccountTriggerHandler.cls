@@ -64,7 +64,7 @@ public with sharing class AccountTriggerHandler {
             for (Database.SaveResult sr : Database.update(contacts, false)) {
                 if (!sr.isSuccess()) {
                     for (Database.Error e : sr.getErrors()) {
-                        System.debug(LoggingLevel.ERROR, (className + ': ' + e.getStatusCode() + '|' + e.getMessage()));
+                        System.debug(LoggingLevel.ERROR, (this.className + ': ' + e.getStatusCode() + '|' + e.getMessage()));
                     }
                 }
             }

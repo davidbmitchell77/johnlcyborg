@@ -58,7 +58,33 @@ private class AccountTriggerTest {
 
     @isTest
      private static void test02() {
+        Account a = [SELECT Id, Name, Website FROM Account LIMIT 1];
+        Test.startTest();
+        try {
+            a.Website = null;
+            update a;
+        }
+        catch(Exception e) {
+            System.debug(LoggingLevel.WARN, e.getMessage());
+        }
+        Test.stopTest();
+        System.assertNotEquals(null, [SELECT Website FROM Account WHERE Id = :a.Id].Website);
+    }
+
+    @isTest
+     private static void test03() {
         Account a = [SELECT Id, Name, OwnerId FROM Account LIMIT 1];
+        System.assertEquals(1, [SELECT COUNT() FROM Account]);
+        Test.startTest();
+        delete a;
+        Test.stopTest();
+        System.assertEquals(0, [SELECT COUNT() FROM Account]);
+    }
+
+    @isTest
+     private static void test04() {
+        Account a = [SELECT Id, Name, OwnerId FROM Account LIMIT 1];
+        System.assertEquals(1, [SELECT COUNT() FROM Account]);
         Test.startTest();
         delete a;
         System.assertEquals(0, [SELECT COUNT() FROM Account]);
