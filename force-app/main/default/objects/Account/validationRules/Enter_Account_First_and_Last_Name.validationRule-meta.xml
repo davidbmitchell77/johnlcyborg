@@ -7,5 +7,5 @@
   NOT(CONTAINS(Name, &quot; &quot;))
 )</errorConditionFormula>
     <errorDisplayField>Name</errorDisplayField>
-    <errorMessage>Please enter a Vails first and last name</errorMessage>
+    <errorMessage>Please enter a valid first and last name.</errorMessage>
 </ValidationRule>
