@@ -39,7 +39,7 @@ private class AccountTriggerTest {
     }
 
     @isTest
-     private static void test01() {
+     private static void test01_update() {
         User u = [SELECT Id, Username, ProfileId FROM User LIMIT 1];
         for (Contact c : [SELECT Id, AccountId, OwnerId FROM Contact]) {
             System.assertNotEquals(c.OwnerId, u.Id);
@@ -57,7 +57,7 @@ private class AccountTriggerTest {
     }
 
     @isTest
-     private static void test02() {
+     private static void test02_validate() {
         Account a = [SELECT Id, Name, Website FROM Account LIMIT 1];
         Test.startTest();
         try {
@@ -72,7 +72,7 @@ private class AccountTriggerTest {
     }
 
     @isTest
-     private static void test03() {
+     private static void test03_delete() {
         Account a = [SELECT Id, Name, OwnerId FROM Account LIMIT 1];
         System.assertEquals(1, [SELECT COUNT() FROM Account]);
         Test.startTest();
@@ -82,7 +82,7 @@ private class AccountTriggerTest {
     }
 
     @isTest
-     private static void test04() {
+     private static void test04_undelete() {
         Account a = [SELECT Id, Name, OwnerId FROM Account LIMIT 1];
         System.assertEquals(1, [SELECT COUNT() FROM Account]);
         Test.startTest();

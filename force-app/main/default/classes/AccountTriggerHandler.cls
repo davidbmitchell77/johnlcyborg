@@ -1,6 +1,6 @@
 public with sharing class AccountTriggerHandler {
     private final TriggerOperation operationType;
-    private final String className;
+    private final String           className;
 
     public AccountTriggerHandler(TriggerOperation to) {
         this.operationType = to;
@@ -62,11 +62,7 @@ public with sharing class AccountTriggerHandler {
 
         if (!contacts.isEmpty()) {
             for (Database.SaveResult sr : Database.update(contacts, false)) {
-                if (!sr.isSuccess()) {
-                    for (Database.Error e : sr.getErrors()) {
-                        System.debug(LoggingLevel.ERROR, (this.className + ': ' + e.getStatusCode() + '|' + e.getMessage()));
-                    }
-                }
+                if (!sr.isSuccess()) { for (Database.Error e : sr.getErrors()) { System.debug(LoggingLevel.ERROR, (this.className + ': ' + e.getStatusCode() + '|' + e.getMessage())); } }
             }
         }
     }

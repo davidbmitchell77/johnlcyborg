@@ -13,7 +13,7 @@ private class LeadTriggerTest {
     }
 
     @isTest
-    private static void test01(){
+    private static void test01_insert(){
         Lead l = new Lead(
             FirstName = 'John',
             LastName  = 'Doe',
@@ -28,7 +28,7 @@ private class LeadTriggerTest {
     }
 
     @isTest
-    private static void test02(){
+    private static void test02_update(){
         Lead l = new Lead(
             FirstName = 'John',
             LastName  = 'Doe',
@@ -49,7 +49,7 @@ private class LeadTriggerTest {
     }
 
     @isTest
-    private static void test03(){
+    private static void test03_validate(){
         Lead l = new Lead(
             FirstName = 'John',
             LastName  = 'Doe',
@@ -75,7 +75,7 @@ private class LeadTriggerTest {
     }
 
     @isTest
-    private static void test04(){
+    private static void test04_delete(){
         Lead l = new Lead(
             FirstName = 'John',
             LastName  = 'Doe',
@@ -93,7 +93,7 @@ private class LeadTriggerTest {
     }
 
     @isTest
-    private static void test05(){
+    private static void test05_undelete(){
         Lead l = new Lead(
             FirstName = 'John',
             LastName  = 'Doe',
