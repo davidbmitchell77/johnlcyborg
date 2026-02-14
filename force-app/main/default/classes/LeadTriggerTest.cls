@@ -88,8 +88,7 @@ private class LeadTriggerTest {
         l.Industry = 'Entertainment';
         delete l;
         Test.stopTest();
-        List<Lead> leads = [SELECT Id, LastName, Email FROM Lead];
-        System.assertEquals(1, leads.size());
+        System.assertEquals(1, [SELECT COUNT() FROM Lead]);
     }
 
     @isTest
@@ -105,9 +104,9 @@ private class LeadTriggerTest {
         insert l;
         l.Industry = 'Entertainment';
         delete l;
+        System.assertEquals(1, [SELECT COUNT() FROM Lead]);
         undelete l;
         Test.stopTest();
-        List<Lead> leads = [SELECT Id, LastName, Email FROM Lead];
-        System.assertEquals(2, leads.size());
+        System.assertEquals(2, [SELECT COUNT() FROM Lead]);
     }
 }
