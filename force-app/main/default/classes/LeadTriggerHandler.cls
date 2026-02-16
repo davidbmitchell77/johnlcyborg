@@ -54,7 +54,6 @@ public with sharing class LeadTriggerHandler {
 
     private void checkForDuplicateLeads(List<Lead> oldLeads, List<Lead> newLeads, Map<Id,Lead> oldMap, Map<Id,Lead> newMap) {
         Map<String,Lead> duplicates = new Map<String,Lead>();
-
         for (Lead l : [SELECT Id, LastName, Email, OwnerId
                          FROM Lead
                         WHERE (LastName IN :lastNames(newLeads) OR Email IN :emailAddresses(newLeads))
