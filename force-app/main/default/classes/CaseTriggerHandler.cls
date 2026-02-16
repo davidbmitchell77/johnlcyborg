@@ -48,13 +48,8 @@ public with sharing class CaseTriggerHandler {
 
     private void updateParentAccounts(List<Case> oldCases, List<Case> newCases, Map<Id,Case> oldMap, Map<Id,Case> newMap) {
         Map<Id,Account> accountsMap = new Map<Id,Account>();
-        for (Case c : nvl(newCases, oldCases)) {
-            if (c.AccountId != null) {
-                if (!accountsMap.containsKey(c.AccountId)) {
-                    Account a = new Account(Id=c.AccountId, OpenCases__c=0);
-                    accountsMap.put(c.AccountId, a);
-                }
-            }
+        for (Id accountId : accountIds(nvl(newCases, oldCases))) {
+            accountsMap.put(accountId, new Account(Id=accountId, OpenCases__c=0));
         }
 
         for (AggregateResult agr : [SELECT AccountId, COUNT(Id) openCases
@@ -64,7 +59,7 @@ public with sharing class CaseTriggerHandler {
                                       WITH SYSTEM_MODE
                                   GROUP BY AccountId
         ]) {
-            Account a = new Account(Id=(Id)agr.get('AccountId'), OpenCases__c=(Decimal)agr.get('openCases'));
+            Account a = new Account(Id=(Id)agr.get('AccountId'), OpenCases__c=(Integer)agr.get('openCases'));
             accountsMap.put(a.Id, a);
         }
 
