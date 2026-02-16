@@ -48,13 +48,13 @@ public with sharing class CaseTriggerHandler {
 
     private void updateParentAccounts(List<Case> oldCases, List<Case> newCases, Map<Id,Case> oldMap, Map<Id,Case> newMap) {
         Map<Id,Account> accountsMap = new Map<Id,Account>();
-        for (Account a : [SELECT Id, OwnerId
-                            FROM Account
-                           WHERE Id IN :accountIds(nvl(newCases, oldCases))
-                            WITH SYSTEM_MODE
-        ]) {
-            a.OpenCases__c = 0;
-            accountsMap.put(a.Id, a);
+        for (Case c : nvl(newCases, oldCases)) {
+            if (c.AccountId != null) {
+                if (!accountsMap.containsKey(c.AccountId)) {
+                    Account a = new Account(Id=c.AccountId, OpenCases__c=0);
+                    accountsMap.put(c.AccountId, a);
+                }
+            }
         }
 
         for (AggregateResult agr : [SELECT AccountId, COUNT(Id) openCases
