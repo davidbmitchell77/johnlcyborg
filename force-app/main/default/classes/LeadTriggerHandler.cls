@@ -119,6 +119,6 @@ public with sharing class LeadTriggerHandler {
     }
 
     private String prefix(Id recordId) {
-        return String.valueof(recordId).substring(0,3);
+        return ((recordId != null) ? String.valueof(recordId).substring(0,3) : null);
     }
 }
