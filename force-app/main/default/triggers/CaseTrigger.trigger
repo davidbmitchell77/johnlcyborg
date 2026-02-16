@@ -1,6 +1,5 @@
 trigger CaseTrigger on Case (before insert, before update, before delete, after insert, after update, after delete, after undelete) {
-    String objectName         = (Trigger.new != null ? Trigger.new : Trigger.old).getSObjectType().getDescribe().getName();
-    TriggerSetting__mdt ts    = TriggerSetting__mdt.getInstance(Test.isRunningTest() ? 'Test' : objectName);
+    TriggerSetting__mdt ts    = TriggerSetting__mdt.getInstance(Test.isRunningTest() ? 'Test' : 'Case');
     Boolean runTriggerHandler = false;
 
     switch on Trigger.operationType {
