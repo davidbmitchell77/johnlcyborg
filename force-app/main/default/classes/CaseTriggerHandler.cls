@@ -65,11 +65,7 @@ public with sharing class CaseTriggerHandler {
 
         if (!accounts.values().isEmpty()) {
             for (Database.SaveResult sr : Database.update(accounts.values(), false)) {
-                if (!sr.isSuccess()) {
-                    for (Database.error e : sr.getErrors()) {
-                        System.debug(LoggingLevel.ERROR, (this.className + ': ' + e.getStatusCode() + '|' + e.getMessage()));
-                    }
-                }
+                if (!sr.isSuccess()) { for (Database.error e : sr.getErrors()) { System.debug(LoggingLevel.ERROR, (this.className + ': ' + e.getStatusCode() + '|' + e.getMessage())); } }
             }
         }
     }

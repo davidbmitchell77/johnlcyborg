@@ -86,4 +86,23 @@ private class CaseTriggerTest {
         }
         System.assertEquals(0, [SELECT COUNT() FROM Case WHERE Id = :a.Id]);
     }
+
+    @isTest
+    private static void test06_dmlException() {
+        Account a = [SELECT Id, Name FROM Account LIMIT 1];
+        Test.startTest();
+        Case c = new Case(
+            AccountId = a.Id,
+            Subject   = 'Test Case #6'
+        );
+        insert c;
+        try {
+            a.Name = null;
+            update a;
+        }
+        catch(Exception e) {
+            System.debug(LoggingLevel.WARN, 'CaseTriggerTest.test06_dmlException(): ' + e.getMessage());
+        }
+        System.assertEquals(0, [SELECT COUNT() FROM Case WHERE Id = :a.Id]);
+    }
 }
