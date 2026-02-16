@@ -47,9 +47,9 @@ public with sharing class CaseTriggerHandler {
     }
 
     private void updateParentAccounts(List<Case> oldCases, List<Case> newCases, Map<Id,Case> oldMap, Map<Id,Case> newMap) {
-        Map<Id,Account> accountsMap = new Map<Id,Account>();
+        Map<Id,Account> accounts = new Map<Id,Account>();
         for (Id accountId : accountIds(nvl(newCases, oldCases))) {
-            accountsMap.put(accountId, new Account(Id=accountId, OpenCases__c=0));
+            accounts.put(accountId, new Account(Id=accountId, OpenCases__c=0));
         }
 
         for (AggregateResult agr : [SELECT AccountId, COUNT(Id) openCases
@@ -60,18 +60,14 @@ public with sharing class CaseTriggerHandler {
                                   GROUP BY AccountId
         ]) {
             Account a = new Account(Id=(Id)agr.get('AccountId'), OpenCases__c=(Integer)agr.get('openCases'));
-            accountsMap.put(a.Id, a);
+            accounts.put(a.Id, a);
         }
 
-        if (!accountsMap.isEmpty()) {
-            if (AccountsMap.values() != null) {
-                if (!accountsMap.values().isEmpty()) {
-                    for (Database.SaveResult sr : Database.update(accountsMap.values(), false)) {
-                        if (!sr.isSuccess()) {
-                            for (Database.error e : sr.getErrors()) {
-                                System.debug(LoggingLevel.ERROR, (this.className + ': ' + e.getStatusCode() + '|' + e.getMessage()));
-                            }
-                        }
+        if (!accounts.values().isEmpty()) {
+            for (Database.SaveResult sr : Database.update(accounts.values(), false)) {
+                if (!sr.isSuccess()) {
+                    for (Database.error e : sr.getErrors()) {
+                        System.debug(LoggingLevel.ERROR, (this.className + ': ' + e.getStatusCode() + '|' + e.getMessage()));
                     }
                 }
             }
