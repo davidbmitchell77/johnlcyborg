@@ -60,11 +60,11 @@ public with sharing class LeadTriggerHandler {
                           AND (NOT Id IN :leadIds(newLeads))
                          WITH SYSTEM_MODE
         ]) {
-            duplicates.put((l.Email + '|' + l.LastName).toLowerCase(), l);
+            duplicates.put((l.Email.trim() + '|' + l.LastName.trim()).toLowerCase(), l);
         }
 
         for (Lead l : newLeads) {
-            String dupKey = (l.Email + '|' + l.LastName).toLowerCase();
+            String dupKey = (l.Email.trim() + '|' + l.LastName.trim()).toLowerCase();
             if (duplicates.containsKey(dupKey)) {
                 l.Description = System.Label.DUPLICATE_LEAD_RECORD;
                 Lead duplicateLead = duplicates.get(dupKey);
@@ -80,8 +80,8 @@ public with sharing class LeadTriggerHandler {
         if (leads != null) {
             for (Lead l : leads) {
                 if (!String.isBlank(l.Email)) {
-                    if (!results.contains(l.Email.toLowerCase())) {
-                        results.add(l.Email.toLowerCase());
+                    if (!results.contains(l.Email.trim().toLowerCase())) {
+                        results.add(l.Email.trim().toLowerCase());
                     }
                 }
             }
@@ -94,8 +94,8 @@ public with sharing class LeadTriggerHandler {
         if (leads != null) {
             for (Lead l : leads) {
                 if (!String.isBlank(l.LastName)) {
-                    if (!results.contains(l.LastName.toLowerCase())) {
-                        results.add(l.LastName.toLowerCase());
+                    if (!results.contains(l.LastName.trim().toLowerCase())) {
+                        results.add(l.LastName.trim().toLowerCase());
                     }
                 }
             }
