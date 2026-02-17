@@ -56,4 +56,11 @@
         <shortDescription>LEAD_NAME_IS_REQUIRED</shortDescription>
         <value>Lead name is required.</value>
     </labels>
+    <labels>
+        <fullName>OPPORTUNITY_DESCRIPTION_IS_REQUIRED</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>OPPORTUNITY_DESCRIPTION_IS_REQUIRED</shortDescription>
+        <value>Opportunity description is required.</value>
+    </labels>
 </CustomLabels>
