@@ -1,5 +1,5 @@
 trigger CaseTrigger on Case (before insert, before update, before delete, after insert, after update, after delete, after undelete) {
-    TriggerSetting__mdt ts    = TriggerSetting__mdt.getInstance(Test.isRunningTest() ? 'Test' : 'Case');
+    TriggerSetting__mdt ts = TriggerSetting__mdt.getInstance(Test.isRunningTest() ? 'Test' : 'Case');
     Boolean runTriggerHandler = false;
 
     switch on Trigger.operationType {
