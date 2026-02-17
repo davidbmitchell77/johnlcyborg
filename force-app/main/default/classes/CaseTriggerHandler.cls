@@ -54,7 +54,7 @@ public with sharing class CaseTriggerHandler {
 
         for (AggregateResult agr : [SELECT AccountId, COUNT(Id) openCases
                                       FROM Case
-                                     WHERE AccountId IN :accountIds(nvl(newCases, oldCases))
+                                     WHERE AccountId IN :accounts.keySet()
                                        AND IsClosed = false
                                       WITH SYSTEM_MODE
                                   GROUP BY AccountId
