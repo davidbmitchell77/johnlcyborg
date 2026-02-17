@@ -17,6 +17,7 @@ private class InfinitusAPIIntegrationTest {
             Gender__c            = 'Female',
             NPI__c               = '0000000001',
             Rating               = 'Good',
+            Website              = 'www.provider.net',
             Active__c            = 'True'
         );
         insert provider;
@@ -27,6 +28,7 @@ private class InfinitusAPIIntegrationTest {
             DateOfBirth__c       = Date.today().addYears(-30),
             Gender__c            = 'Male',
             Active__c            = 'True',
+            Website              = 'www.patient.com',
             MemberPlan__c        = memberPlan.Id,
             Provider__c          = provider.Id
         );
