@@ -85,7 +85,7 @@ public with sharing class LeadTriggerHandler {
         }
 
         if (!leads.isEmpty()) {
-            for (Database.SaveResult sr : Database.update(leads, false)) {
+            for (Database.SaveResult sr : Database.update(leads, false, AccessLevel.SYSTEM_MODE)) {
                 if (!sr.isSuccess()) { for (Database.Error e : sr.getErrors()) { System.debug(LoggingLevel.ERROR, (this.className + ': ' + e.getStatusCode() + '|' + e.getMessage())); } }
             }
         }
