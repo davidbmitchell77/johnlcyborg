@@ -1,12 +1,10 @@
 public with sharing class LeadTriggerHandler {
     private final TriggerOperation operationType;
     private final String className;
-    private final String userIdPrefix;
 
     public LeadTriggerHandler(TriggerOperation to) {
         this.operationType = to;
-        this.className     = String.valueOf(this).substring(0,String.valueOf(this).indexOf(':'));
-        this.userIdPrefix  = User.SObjectType.getDescribe().getKeyPrefix();
+        this.className = String.valueOf(this).substring(0, String.valueOf(this).indexOf(':'));
     }
 
     public Boolean isValid(List<Lead> leads) {
@@ -29,10 +27,10 @@ public with sharing class LeadTriggerHandler {
     public void run(List<Lead> oldLeads, List<Lead> newLeads, Map<Id,Lead> oldMap, Map<Id,Lead> newMap) {
         switch on this.operationType {
             when BEFORE_INSERT {
-                checkForDuplicateLeads(null, newLeads, null, null);
+                flagDuplicateLeads(null, newLeads, null, null);
             }
             when BEFORE_UPDATE {
-                checkForDuplicateLeads(oldLeads, newLeads, oldMap, newMap);
+                flagDuplicateLeads(oldLeads, newLeads, oldMap, newMap);
             }
             when BEFORE_DELETE {
 
@@ -47,55 +45,74 @@ public with sharing class LeadTriggerHandler {
 
             }
             when AFTER_UNDELETE {
-
+                flagDuplicateLeads(null, newLeads, null, newMap);
             }
         }
     }
 
-    private void checkForDuplicateLeads(List<Lead> oldLeads, List<Lead> newLeads, Map<Id,Lead> oldMap, Map<Id,Lead> newMap) {
-        Map<String,Lead> duplicates = new Map<String,Lead>();
-        for (Lead l : [SELECT Id, LastName, Email, OwnerId
-                         FROM Lead
-                        WHERE (LastName IN :lastNames(newLeads) OR Email IN :emailAddresses(newLeads))
-                          AND (NOT Id IN :leadIds(newLeads))
-                         WITH SYSTEM_MODE
+    private void flagDuplicateLeads(List<Lead> oldLeads, List<Lead> newLeads, Map<Id,Lead> oldMap, Map<Id,Lead> newMap) {
+        List<Lead> leads = new List<Lead>();
+
+        Set<String> duplicates = new Set<String>();
+        for (AggregateResult agr : [SELECT LastName, Email, COUNT(Id)
+                                      FROM Lead
+                                     WHERE (LastName IN :lastNames(newLeads) OR Email IN :emailAddresses(newLeads))
+                                      WITH SYSTEM_MODE
+                                  GROUP BY LastName, Email
         ]) {
-            duplicates.put((l.Email.trim() + '|' + l.LastName.trim()).toLowerCase(), l);
-        }
-
-        for (Lead l : newLeads) {
-            String dupKey = (l.Email.trim() + '|' + l.LastName.trim()).toLowerCase();
-            if (duplicates.containsKey(dupKey)) {
-                l.Description = System.Label.DUPLICATE_LEAD_RECORD;
-                Lead duplicateLead = duplicates.get(dupKey);
-                if (prefix(duplicateLead.OwnerId) == this.userIdPrefix) {
-                    l.OwnerId = duplicateLead.OwnerId;
-                }
-            }
-        }
-    }
-
-    private Set<String> emailAddresses(List<Lead> leads) {
-        Set<String> results = new Set<String>();
-        if (leads != null) {
-            for (Lead l : leads) {
-                if (!String.isBlank(l.Email)) {
-                    if (!results.contains(l.Email.trim().toLowerCase())) {
-                        results.add(l.Email.trim().toLowerCase());
+            if (!String.isBlank((String)agr.get('LastName'))) {
+                if (!String.isBlank((String)agr.get('Email'))) {
+                    if (!duplicates.contains(dupKey(agr))) {
+                        duplicates.add(dupKey(agr));
                     }
                 }
             }
         }
-        return results;
+
+        for (Lead l : newLeads) {
+            if (!String.isBlank(l.LastName)) {
+                if (!String.isBlank(l.Email)) {
+                    if (this.operationType == TriggerOperation.BEFORE_INSERT || this.operationType == TriggerOperation.BEFORE_UPDATE) {
+                        l.Description = (duplicates.contains(dupKey(l)) ? 'This is a duplicate lead record.' : 'No duplicate records found.');
+                    }
+                    else if (this.operationType == TriggerOperation.AFTER_UNDELETE) {
+                        leads.add(new Lead(Id=l.Id, Description='This is a duplicate lead record.'));
+                    }
+                }
+            }
+        }
+
+        if (!leads.isEmpty()) {
+            for (Database.SaveResult sr : Database.update(leads, false)) {
+                if (!sr.isSuccess()) { for (Database.Error e : sr.getErrors()) { System.debug(LoggingLevel.ERROR, (this.className + ': ' + e.getStatusCode() + '|' + e.getMessage())); } }
+            }
+        }
+    }
+
+    private String dupKey(AggregateResult agr) {
+        String result = '';
+        result += ((String)agr.get('LastName')).trim().toLowerCase();
+        result += '|';
+        result += ((String)agr.get('Email')).trim().toLowerCase();
+        return result;
+    }
+
+    private String dupKey(Lead l) {
+        String result = '';
+        result += l.LastName.trim().toLowerCase();
+        result += '|';
+        result += l.Email.trim().toLowerCase();
+        return result;
     }
 
     private Set<String> lastNames(List<Lead> leads) {
         Set<String> results = new Set<String>();
         if (leads != null) {
             for (Lead l : leads) {
-                if (!String.isBlank(l.LastName)) {
-                    if (!results.contains(l.LastName.trim().toLowerCase())) {
-                        results.add(l.LastName.trim().toLowerCase());
+                if (!String.isEmpty(l.LastName)) {
+                    String s = l.LastName.trim().toLowerCase();
+                    if (!results.contains(s)) {
+                        results.add(s);
                     }
                 }
             }
@@ -103,21 +120,18 @@ public with sharing class LeadTriggerHandler {
         return results;
     }
 
-    private Set<Id> leadIds(List<Lead> leads) {
-        Set<Id> results = new Set<Id>();
+    private Set<String> emailAddresses(List<Lead> leads) {
+        Set<String> results = new Set<String>();
         if (leads != null) {
             for (Lead l : leads) {
-                if (l.Id != null) {
-                    if (!results.contains(l.Id)) {
-                        results.add(l.Id);
+                if (!String.isEmpty(l.Email)) {
+                    String s = l.Email.trim().toLowerCase();
+                    if (!results.contains(s)) {
+                        results.add(s);
                     }
                 }
             }
         }
         return results;
-    }
-
-    private String prefix(Id recordId) {
-        return ((recordId != null) ? String.valueOf(recordId).substring(0,3) : null);
     }
 }
