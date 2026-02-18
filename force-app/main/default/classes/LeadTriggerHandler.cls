@@ -72,11 +72,13 @@ public with sharing class LeadTriggerHandler {
         for (Lead l : newLeads) {
             if (!String.isBlank(l.LastName)) {
                 if (!String.isBlank(l.Email)) {
-                    if (this.operationType == TriggerOperation.BEFORE_INSERT || this.operationType == TriggerOperation.BEFORE_UPDATE) {
-                        l.Description = (duplicates.contains(dupKey(l)) ? 'This is a duplicate lead record.' : 'No duplicate records found.');
-                    }
-                    else if (this.operationType == TriggerOperation.AFTER_UNDELETE) {
-                        leads.add(new Lead(Id=l.Id, Description='This is a duplicate lead record.'));
+                    switch on this.operationType {
+                        when BEFORE_INSERT, BEFORE_UPDATE {
+                            l.Description = (duplicates.contains(dupKey(l)) ? 'This is a duplicate lead record.' : 'No duplicate records found.');
+                        }
+                        when AFTER_UNDELETE {
+                            leads.add(new Lead(Id=l.Id, Description='This is a duplicate lead record.'));
+                        }
                     }
                 }
             }
