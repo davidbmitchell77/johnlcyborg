@@ -4,7 +4,7 @@ public with sharing class LeadTriggerHandler {
 
     public LeadTriggerHandler(TriggerOperation to) {
         this.operationType = to;
-        this.className = String.valueOf(this).substring(0, String.valueOf(this).indexOf(':'));
+        this.className = String.valueOf(this).substring(0,String.valueOf(this).indexOf(':'));
     }
 
     public Boolean isValid(List<Lead> leads) {
