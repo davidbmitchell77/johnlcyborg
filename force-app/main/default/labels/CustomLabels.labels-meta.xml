@@ -15,11 +15,25 @@
         <value>Account website is required.</value>
     </labels>
     <labels>
+        <fullName>APPROVING_REQUEST</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>APPROVING_REQUEST</shortDescription>
+        <value>Approving request.</value>
+    </labels>
+    <labels>
         <fullName>CASE_SUBJECT_IS_REQUIRED</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>CASE_SUBJECT_IS_REQUIRED</shortDescription>
         <value>Case subject is required.</value>
+    </labels>
+    <labels>
+        <fullName>CONTACT_PHONE_NUMBER_IS_REQUIRED</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>CONTACT_PHONE_NUMBER_IS_REQUIRED</shortDescription>
+        <value>Contact phone number is required.</value>
     </labels>
     <labels>
         <fullName>DUPLICATE_LEAD_RECORD</fullName>
@@ -62,5 +76,12 @@
         <protected>true</protected>
         <shortDescription>OPPORTUNITY_DESCRIPTION_IS_REQUIRED</shortDescription>
         <value>Opportunity description is required.</value>
+    </labels>
+    <labels>
+        <fullName>SUBMITTING_REQUEST_FOR_APPROVAL</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>SUBMITTING_REQUEST_FOR_APPROVAL</shortDescription>
+        <value>Submitting request for approval.</value>
     </labels>
 </CustomLabels>
