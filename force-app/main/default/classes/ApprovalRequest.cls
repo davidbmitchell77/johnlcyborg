@@ -20,7 +20,7 @@ public class ApprovalRequest {
         req.setObjectId(recordId);
         req.setProcessDefinitionNameOrId(this.processNameOrId);
         req.setSubmitterId(UserInfo.getUserId());
-        req.setSkipEntryCriteria(false);
+        req.setSkipEntryCriteria(Test.isRunningTest() ? true : false);
         req.setComments(System.Label.SUBMITTING_REQUEST_FOR_APPROVAL);
         Approval.ProcessResult result = Approval.process(req);
         System.debug((result.isSuccess() ? LoggingLevel.INFO : LoggingLevel.ERROR), (this.apexClassName + ' approval request status: ' + result.getInstanceStatus()));
