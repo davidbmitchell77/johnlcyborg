@@ -1,10 +1,10 @@
 public class ApprovalRequest {
-    private final String processNameOrId;
+    private final String processDeveloperName;
     private final String apexClassName;
 
     public ApprovalRequest(String s) {
-        this.processNameOrId = s;
-        this.apexClassName   = String.valueOf(this).substring(0,String.valueOf(this).indexOf(':'));
+        this.processDeveloperName = s;
+        this.apexClassName        = String.valueOf(this).substring(0,String.valueOf(this).indexOf(':'));
     }
 
     public List<Approval.ProcessResult> submit(List<String> recordIds) {
@@ -18,7 +18,7 @@ public class ApprovalRequest {
     public Approval.ProcessResult submit(String recordId) {
         Approval.ProcessSubmitRequest req = new Approval.ProcessSubmitRequest();
         req.setObjectId(recordId);
-        req.setProcessDefinitionNameOrId(this.processNameOrId);
+        req.setProcessDefinitionNameOrId(this.processDeveloperName);
         req.setSubmitterId(UserInfo.getUserId());
         req.setSkipEntryCriteria(Test.isRunningTest() ? true : false);
         req.setComments(System.Label.SUBMITTING_REQUEST_FOR_APPROVAL);
