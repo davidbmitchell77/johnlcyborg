@@ -4,9 +4,9 @@ private class ApprovalRequestTest {
     private static void dataFactory() {
         Account a = new Account(
             RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('Patient').getRecordTypeId(),
-            Name    = 'Test ' + UUID.randomUUID().toString(),
+            Name    = 'Test Company',
             Phone   = '(000) 000-0000',
-            Website = 'www.foobar.com'
+            Website = 'www.testcompany.com'
         );
         insert a;
     }
