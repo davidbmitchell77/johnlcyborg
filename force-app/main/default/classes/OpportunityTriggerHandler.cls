@@ -12,8 +12,8 @@ public with sharing class OpportunityTriggerHandler {
         if (opportunities != null) {
             for (Opportunity o : opportunities) {
                 if (String.isBlank(o.Description)) {
-                    o.Description.addError(System.Label.OPPORTUNITY_DESCRIPTION_IS_REQUIRED);
-                    result = false;
+                  //o.Description.addError(System.Label.OPPORTUNITY_DESCRIPTION_IS_REQUIRED);
+                  //result = false;
                 }
             }
         }
