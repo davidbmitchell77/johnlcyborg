@@ -1,10 +1,10 @@
 public with sharing class ContactTriggerHandler {
     private final TriggerOperation operationType;
-    private final String           className;
+    private final String           apexClassName;
 
     public ContactTriggerHandler(TriggerOperation to) {
         this.operationType = to;
-        this.className     = String.valueOf(this).substring(0,String.valueOf(this).indexOf(':'));
+        this.apexClassName = String.valueOf(this).substring(0,String.valueOf(this).indexOf(':'));
     }
 
     public Boolean isValid(List<Contact> contacts) {
