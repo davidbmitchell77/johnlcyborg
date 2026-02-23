@@ -1,19 +1,19 @@
 public with sharing class OpportunityTriggerHandler {
     private final TriggerOperation operationType;
-    private final String           className;
+    private final String           apexClassName;
 
     public OpportunityTriggerHandler(TriggerOperation to) {
         this.operationType = to;
-        this.className     = String.valueOf(this).substring(0,String.valueOf(this).indexOf(':'));
+        this.apexClassName = String.valueOf(this).substring(0,String.valueOf(this).indexOf(':'));
     }
 
     public Boolean isValid(List<Opportunity> opportunities) {
         Boolean result = true;
         if (opportunities != null) {
             for (Opportunity o : opportunities) {
-                if (String.isBlank(o.Description)) {
-                  //o.Description.addError(System.Label.OPPORTUNITY_DESCRIPTION_IS_REQUIRED);
-                  //result = false;
+                if (o.CloseDate == null) {
+                    o.CloseDate.addError(System.Label.OPPORTUNITY_CLOSE_DATE_IS_REQUIRED);
+                    result = false;
                 }
             }
         }

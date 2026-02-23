@@ -5,7 +5,7 @@ private class OpportunityTriggerTest {
         Account a = new Account(
             Name    = 'Test Account',
             Phone   = '(000) 000-0000',
-            Website = 'www.foobar.com'
+            Website = 'www.testaccount.com'
         );
         insert a;
     }
@@ -94,11 +94,11 @@ private class OpportunityTriggerTest {
         Account a = [SELECT Id, Name, Phone, Website FROM Account LIMIT 1];
         Opportunity o = new Opportunity(
             Name        = 'Test Opportunity #5',
-            Description = null,
+            Description = 'FOR TESTING PURPOSES ONLY.',
             StageName   = 'Prospecting',
             Amount      = 100000.00,
             Type        = 'New Business',
-            CloseDate   = Date.today().addDays(28),
+            CloseDate   = null,
             AccountId   = a.Id
         );
         Test.startTest();

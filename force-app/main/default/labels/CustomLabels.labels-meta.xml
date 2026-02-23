@@ -71,6 +71,13 @@
         <value>Lead name is required.</value>
     </labels>
     <labels>
+        <fullName>OPPORTUNITY_CLOSE_DATE_IS_REQUIRED</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>OPPORTUNITY_CLOSE_DATE_IS_REQUIRED</shortDescription>
+        <value>Opportunity close date is required.</value>
+    </labels>
+    <labels>
         <fullName>OPPORTUNITY_DESCRIPTION_IS_REQUIRED</fullName>
         <language>en_US</language>
         <protected>true</protected>
