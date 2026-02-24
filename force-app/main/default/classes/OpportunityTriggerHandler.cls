@@ -49,20 +49,23 @@ public with sharing class OpportunityTriggerHandler {
     }
 
     private void updateParentAccounts(List<Opportunity> oldOptys, List<Opportunity> newOptys, Map<Id,Opportunity> oldMap, Map<Id,Opportunity> newMap) {
-        List<Account> accounts = new List<Account>();
+        Map<Id,Account> accounts = new Map<Id,Account>();
+        for (Id accountId : accountIds(oldOptys, newOptys, oldMap, newMap)) {
+            accounts.put(accountId, new Account(Id=accountId, MaxOptyAmount__c=0.00));
+        }
 
         for (AggregateResult agr : [SELECT AccountId, MAX(Amount) maxOptyAmount
                                       FROM Opportunity
-                                     WHERE AccountId IN :accountIds(oldOptys, newOptys, oldMap, newMap)
+                                     WHERE AccountId IN :accounts.keySet()
                                       WITH SYSTEM_MODE
                                   GROUP BY AccountId
         ]) {
             Account a = new Account(Id=(Id)agr.get('AccountId'), MaxOptyAmount__c=(Decimal)agr.get('maxOptyAmount'));
-            accounts.add(a);
+            accounts.put(a.Id, a);
         }
 
-        if (!accounts.isEmpty()) {
-            for (Database.SaveResult sr : Database.update(accounts, false, AccessLevel.SYSTEM_MODE)) {
+        if (!accounts.values().isEmpty()) {
+            for (Database.SaveResult sr : Database.update(accounts.values(), false, AccessLevel.SYSTEM_MODE)) {
                 if (!sr.isSuccess()) { for (Database.Error e : sr.getErrors()) { System.debug(LoggingLevel.ERROR, (this.apexClassName + ': ' + e.getStatusCode() + '|' + e.getMessage())); } }
             }
         }

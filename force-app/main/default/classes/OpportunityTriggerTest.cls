@@ -48,6 +48,7 @@ private class OpportunityTriggerTest {
         Test.stopTest();
         System.assertEquals(1, [SELECT COUNT() FROM Opportunity]);
         System.assertEquals(true, [SELECT IsClosed FROM Opportunity WHERE Id = :o.Id LIMIT 1].IsClosed);
+        System.assertEquals(o.Amount, [SELECT Id, MaxOptyAmount__c FROM Account LIMIT 1].MaxOptyAmount__c);
     }
 
     @isTest
