@@ -43,7 +43,7 @@ private class OpportunityTriggerTest {
         );
         Test.startTest();
         insert o;
-        o.StageName = 'Closed Lost';
+        o.StageName = 'Closed Won';
         update o;
         Test.stopTest();
         System.assertEquals(1, [SELECT COUNT() FROM Opportunity]);
@@ -75,11 +75,12 @@ private class OpportunityTriggerTest {
         Opportunity o = new Opportunity(
             Name        = 'Test Opportunity #4',
             Description = 'FOR TESTING PURPOSES ONLY.',
-            StageName   = 'Prospecting',
+            StageName   = 'Closed Won',
             Amount      = 100000.00,
             Type        = 'New Business',
             CloseDate   = Date.today().addDays(28),
-            AccountId   = a.Id
+            AccountId   = a.Id,
+            Probability = 100
         );
         Test.startTest();
         insert o;
