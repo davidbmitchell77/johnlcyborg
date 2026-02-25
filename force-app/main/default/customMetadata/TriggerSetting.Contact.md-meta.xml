@@ -24,11 +24,11 @@
     </values>
     <values>
         <field>BeforeInsert__c</field>
-        <value xsi:type="xsd:boolean">false</value>
+        <value xsi:type="xsd:boolean">true</value>
     </values>
     <values>
         <field>BeforeUpdate__c</field>
-        <value xsi:type="xsd:boolean">false</value>
+        <value xsi:type="xsd:boolean">true</value>
     </values>
     <values>
         <field>MaxRecordIds__c</field>

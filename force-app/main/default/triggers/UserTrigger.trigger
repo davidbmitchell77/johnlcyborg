@@ -1,32 +1,33 @@
 trigger UserTrigger on User (before insert, before update, before delete, after insert, after update, after delete, after undelete) {
+    TriggerSetting__mdt ts = TriggerSetting__mdt.getInstance(Test.isRunningTest() ? 'Test' : 'User');
     Boolean runTriggerHandler = false;
 
     switch on Trigger.operationType {
         when BEFORE_INSERT {
-            runTriggerHandler = false;
+            runTriggerHandler = ts.BeforeInsert__c;
         }
         when BEFORE_UPDATE {
-            runTriggerHandler = false;
+            runTriggerHandler = ts.BeforeUpdate__c;
         }
         when BEFORE_DELETE {
-            runTriggerHandler = false;
+            runTriggerHandler = ts.BeforeDelete__c;
         }
         when AFTER_INSERT {
-            runTriggerHandler = true;
+            runTriggerHandler = ts.AfterInsert__c;
         }
         when AFTER_UPDATE {
-            runTriggerHandler = true;
+            runTriggerHandler = ts.AfterUpdate__c;
         }
         when AFTER_DELETE {
-            runTriggerHandler = true;
+            runTriggerHandler = ts.AfterDelete__c;
         }
         when AFTER_UNDELETE {
-            runTriggerHandler = true;
+            runTriggerHandler = ts.AfterUndelete__c;
         }
     }
 
     if (runTriggerHandler == true) {
-        UserTriggerHandler handler = new UserTriggerhandler(Trigger.operationType);
+        UserTriggerHandler handler = new UserTriggerHandler(Trigger.operationType);
         if (handler.isValid(Trigger.new)) {
             handler.run(Trigger.old, Trigger.new, Trigger.oldMap, Trigger.newMap);
         }
