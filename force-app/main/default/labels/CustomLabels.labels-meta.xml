@@ -85,10 +85,24 @@
         <value>Opportunity description is required.</value>
     </labels>
     <labels>
+        <fullName>OPPORTUNITY_STAGE_CLOSED_WON</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>OPPORTUNITY_STAGE_CLOSED_WON</shortDescription>
+        <value>Closed Won</value>
+    </labels>
+    <labels>
         <fullName>SUBMITTING_REQUEST_FOR_APPROVAL</fullName>
         <language>en_US</language>
         <protected>true</protected>
         <shortDescription>SUBMITTING_REQUEST_FOR_APPROVAL</shortDescription>
         <value>Submitting request for approval.</value>
+    </labels>
+    <labels>
+        <fullName>USER_LAST_NAME_IS_REQUIRED</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>USER_LAST_NAME_IS_REQUIRED</shortDescription>
+        <value>User last name is required.</value>
     </labels>
 </CustomLabels>
