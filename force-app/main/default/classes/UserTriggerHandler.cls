@@ -54,10 +54,12 @@ public with sharing class UserTriggerHandler {
         }
 
         for (User u : nvl(newUsers, oldUsers)) {
+            Boolean addToGroup = false;
+            Boolean removeFromGroup = false;
             switch on this.operationType {
                 when AFTER_INSERT {
                     if (u.ProfileId == this.profileId) {
-                        addMembers.add(new GroupMember(GroupId=this.groupId, UserOrGroupId=u.Id));
+                        addToGroup = true;
                     }
                 }
                 when AFTER_UPDATE {
@@ -65,26 +67,26 @@ public with sharing class UserTriggerHandler {
                     User newUser = newMap.get(u.Id);
                     if (oldUser.ProfileId != newUser.ProfileId) {
                         if (oldUser.ProfileId == this.profileId) {
-                             Id groupMemberId = members.get(u.Id).Id;
-                             removeMembers.add(new GroupMember(Id=groupMemberId));
+                             removeFromGroup = true;
                         }
                         if (newUser.profileId == this.profileId) {
-                            addMembers.add(new GroupMember(GroupId=this.groupId, UserOrGroupId=u.Id));
+                            addToGroup = true;
                         }
                     }
                     if (oldUser.IsActive != newUser.IsActive) {
                         if (u.ProfileId == this.profileId) {
                             if (u.IsActive == false) {
-                                 Id groupMemberId = members.get(u.Id).Id;
-                                 removeMembers.add(new GroupMember(Id=groupMemberId));
+                                removeFromGroup = true;
                             }
                             else {
-                                addMembers.add(new GroupMember(GroupId=this.groupId, UserOrGroupId=u.Id));
+                                addToGroup = true;
                             }
                         }
                     }
                 }
             }
+            if (removeFromGroup == true) { removeMembers.add(new GroupMember(Id=members.get(u.Id).Id));               } else
+            if (addToGroup == true     ) { addMembers.add(new GroupMember(GroupId=this.groupId, UserOrGroupId=u.Id)); }
         }
 
         if (!addMembers.isEmpty()) {
