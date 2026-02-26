@@ -1,4 +1,4 @@
-trigger UserTrigger on User (before insert, before update, before delete, after insert, after update, after delete, after undelete) {
+trigger UserTrigger on User (before insert, before update, after insert, after update) {
     TriggerSetting__mdt ts = TriggerSetting__mdt.getInstance(Test.isRunningTest() ? 'Test' : 'User');
     Boolean runTriggerHandler = false;
 
@@ -9,20 +9,11 @@ trigger UserTrigger on User (before insert, before update, before delete, after 
         when BEFORE_UPDATE {
             runTriggerHandler = ts.BeforeUpdate__c;
         }
-        when BEFORE_DELETE {
-            runTriggerHandler = ts.BeforeDelete__c;
-        }
         when AFTER_INSERT {
             runTriggerHandler = ts.AfterInsert__c;
         }
         when AFTER_UPDATE {
             runTriggerHandler = ts.AfterUpdate__c;
-        }
-        when AFTER_DELETE {
-            runTriggerHandler = ts.AfterDelete__c;
-        }
-        when AFTER_UNDELETE {
-            runTriggerHandler = ts.AfterUndelete__c;
         }
     }
 

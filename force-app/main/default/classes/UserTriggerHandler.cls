@@ -19,20 +19,11 @@ public with sharing class UserTriggerHandler {
             when BEFORE_UPDATE {
 
             }
-            when BEFORE_DELETE {
-
-            }
             when AFTER_INSERT {
                 updateGroupMembership(null, newUsers, null, newMap);
             }
             when AFTER_UPDATE {
                 updateGroupMembership(oldUsers, newUsers, oldMap, newMap);
-            }
-            when AFTER_DELETE {
-                updateGroupMembership(oldUsers, null, oldMap, null);
-            }
-            when AFTER_UNDELETE {
-                updateGroupMembership(null, newUsers, null, newMap);
             }
         }
     }
@@ -64,7 +55,7 @@ public with sharing class UserTriggerHandler {
 
         for (User u : nvl(newUsers, oldUsers)) {
             switch on this.operationType {
-                when AFTER_INSERT, AFTER_UNDELETE {
+                when AFTER_INSERT {
                     if (u.ProfileId == this.profileId) {
                         addMembers.add(new GroupMember(GroupId=this.groupId, UserOrGroupId=u.Id));
                     }
@@ -81,10 +72,16 @@ public with sharing class UserTriggerHandler {
                             addMembers.add(new GroupMember(GroupId=this.groupId, UserOrGroupId=u.Id));
                         }
                     }
-                }
-                when AFTER_DELETE {
-                    if (u.ProfileId == this.profileId) {
-                        removeMembers.add(new GroupMember(GroupId=this.groupId, UserOrGroupId=u.Id));
+                    if (oldUser.IsActive != newUser.IsActive) {
+                        if (u.ProfileId == this.profileId) {
+                            if (u.IsActive == false) {
+                                 Id groupMemberId = members.get(u.Id).Id;
+                                 removeMembers.add(new GroupMember(Id=groupMemberId));
+                            }
+                            else {
+                                addMembers.add(new GroupMember(GroupId=this.groupId, UserOrGroupId=u.Id));
+                            }
+                        }
                     }
                 }
             }
@@ -92,21 +89,13 @@ public with sharing class UserTriggerHandler {
 
         if (!addMembers.isEmpty()) {
             for (Database.SaveResult sr : Database.insert(addMembers, false)) {
-                if (!sr.isSuccess()) {
-                    for (Database.Error e : sr.getErrors()) {
-                        System.debug(LoggingLevel.ERROR, (this.apexClassName + ': ' + e.getStatusCode() + '|' + e.getMessage()));
-                    }
-                }
+                if (!sr.isSuccess()) { for (Database.Error e : sr.getErrors()) { System.debug(LoggingLevel.ERROR, (this.apexClassName + ': ' + e.getStatusCode() + '|' + e.getMessage())); } }
             }
         }
 
         if (!removeMembers.isEmpty()) {
             for (Database.DeleteResult dr : Database.delete(removeMembers, false)) {
-                if (!dr.isSuccess()) {
-                    for (Database.Error e : dr.getErrors()) {
-                        System.debug(LoggingLevel.ERROR, (this.apexClassName + ': ' + e.getStatusCode() + '|' + e.getMessage()));
-                    }
-                }
+                if (!dr.isSuccess()) { for (Database.Error e : dr.getErrors()) { System.debug(LoggingLevel.ERROR, (this.apexClassName + ': ' + e.getStatusCode() + '|' + e.getMessage())); } }
             }
         }
     }
