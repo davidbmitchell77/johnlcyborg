@@ -36,7 +36,7 @@ private class InfinitusAPIIntegrationTest {
     }
 
     @isTest
-    private static void test01() {
+    private static void test01_http_ok() {
         Account patient = [SELECT Id, Name, DateOfBirth__c, Gender__c, MemberPlan__c, Provider__c FROM Account WHERE RecordType.DeveloperName = 'Patient' LIMIT 1];
         Account provider = [SELECT Id, Name, NPI__c FROM Account WHERE RecordType.DeveloperName = 'Provider' LIMIT 1];
         MemberPlan__c memberPlan = [SELECT Id, Name, SubscriberId__c, GroupNumber__c, PolicyNumber__c FROM MemberPlan__c LIMIT 1];
@@ -58,7 +58,7 @@ private class InfinitusAPIIntegrationTest {
     }
 
     @isTest
-    private static void test02() {
+    private static void test02_http_error() {
         Account patient = [SELECT Id, Name, DateOfBirth__c, Gender__c, MemberPlan__c, Provider__c FROM Account WHERE RecordType.DeveloperName = 'Patient' LIMIT 1];
         Account provider = [SELECT Id, Name, NPI__c FROM Account WHERE RecordType.DeveloperName = 'Provider' LIMIT 1];
         MemberPlan__c memberPlan = [SELECT Id, Name, SubscriberId__c, GroupNumber__c, PolicyNumber__c FROM MemberPlan__c LIMIT 1];
@@ -79,7 +79,7 @@ private class InfinitusAPIIntegrationTest {
     }
 
     @isTest
-    private static void test03() {
+    private static void test03_dml_exception() {
         Account patient = [SELECT Id, Name, DateOfBirth__c, Gender__c, MemberPlan__c, Provider__c FROM Account WHERE RecordType.DeveloperName = 'Patient' LIMIT 1];
         Account provider = [SELECT Id, Name, NPI__c FROM Account WHERE RecordType.DeveloperName = 'Provider' LIMIT 1];
         MemberPlan__c memberPlan = [SELECT Id, Name, SubscriberId__c, GroupNumber__c, PolicyNumber__c FROM MemberPlan__c LIMIT 1];

@@ -1,10 +1,10 @@
 public with sharing class CaseTriggerHandler {
     private final TriggerOperation operationType;
-    private final String           className;
+    private final String           apexClassName;
 
     public CaseTriggerHandler(TriggerOperation to) {
         this.operationType = to;
-        this.className     = String.valueOf(this).substring(0,String.valueOf(this).indexOf(':'));
+        this.apexClassName = String.valueOf(this).substring(0,String.valueOf(this).indexOf(':'));
     }
 
     public Boolean isValid(List<Case> cases) {
@@ -65,7 +65,7 @@ public with sharing class CaseTriggerHandler {
 
         if (!accounts.values().isEmpty()) {
             for (Database.SaveResult sr : Database.update(accounts.values(), false, AccessLevel.SYSTEM_MODE)) {
-                if (!sr.isSuccess()) { for (Database.error e : sr.getErrors()) { System.debug(LoggingLevel.ERROR, (this.className + ': ' + e.getStatusCode() + '|' + e.getMessage())); } }
+                if (!sr.isSuccess()) { for (Database.error e : sr.getErrors()) { System.debug(LoggingLevel.ERROR, (this.apexClassName + ': ' + e.getStatusCode() + '|' + e.getMessage())); } }
             }
         }
     }

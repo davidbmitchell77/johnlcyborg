@@ -1,10 +1,10 @@
 public with sharing class LeadTriggerHandler {
     private final TriggerOperation operationType;
-    private final String className;
+    private final String           apexClassName;
 
     public LeadTriggerHandler(TriggerOperation to) {
         this.operationType = to;
-        this.className = String.valueOf(this).substring(0,String.valueOf(this).indexOf(':'));
+        this.apexClassName = String.valueOf(this).substring(0,String.valueOf(this).indexOf(':'));
     }
 
     public Boolean isValid(List<Lead> leads) {
@@ -57,6 +57,7 @@ public with sharing class LeadTriggerHandler {
         for (AggregateResult agr : [SELECT LastName, Email, COUNT(Id)
                                       FROM Lead
                                      WHERE (LastName IN :lastNames(newLeads) OR Email IN :emailAddresses(newLeads))
+                                       AND (NOT Id IN :leadIds(newLeads))
                                       WITH SYSTEM_MODE
                                   GROUP BY LastName, Email
         ]) {
@@ -87,7 +88,7 @@ public with sharing class LeadTriggerHandler {
 
         if (!leads.isEmpty()) {
             for (Database.SaveResult sr : Database.update(leads, false, AccessLevel.SYSTEM_MODE)) {
-                if (!sr.isSuccess()) { for (Database.Error e : sr.getErrors()) { System.debug(LoggingLevel.ERROR, (this.className + ': ' + e.getStatusCode() + '|' + e.getMessage())); } }
+                if (!sr.isSuccess()) { for (Database.Error e : sr.getErrors()) { System.debug(LoggingLevel.ERROR, (this.apexClassName + ': ' + e.getStatusCode() + '|' + e.getMessage())); } }
             }
         }
     }
@@ -132,6 +133,18 @@ public with sharing class LeadTriggerHandler {
                     if (!results.contains(s)) {
                         results.add(s);
                     }
+                }
+            }
+        }
+        return results;
+    }
+
+    private Set<Id> leadIds(List<Lead> leads) {
+        Set<Id> results = new Set<Id>();
+        if (leads != null) {
+            for (Lead l : leads) {
+                if (!results.contains(l.Id)) {
+                    results.add(l.Id);
                 }
             }
         }

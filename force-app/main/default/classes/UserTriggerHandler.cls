@@ -1,0 +1,117 @@
+public with sharing class UserTriggerHandler {
+    private final TriggerOperation operationType;
+    private final String           apexClassName;
+    private final String           groupId;
+    private final String           profileId;
+
+    public UserTriggerHandler(TriggerOperation to) {
+        this.operationType = to;
+        this.apexClassName = String.valueOf(this).substring(0,String.valueOf(this).indexOf(':'));
+        this.groupId       = [SELECT Id FROM Group WHERE DeveloperName = 'Admins' LIMIT 1].Id;
+        this.profileId     = [SELECT Id FROM Profile WHERE Name = 'System Administrator' LIMIT 1].Id;
+    }
+
+    public void run(List<User> oldUsers, List<User> newUsers, Map<Id,User> oldMap, Map<Id,User> newMap) {
+        switch on this.operationType {
+            when BEFORE_INSERT {
+
+            }
+            when BEFORE_UPDATE {
+
+            }
+            when BEFORE_DELETE {
+
+            }
+            when AFTER_INSERT {
+                updateGroupMembership(null, newUsers, null, newMap);
+            }
+            when AFTER_UPDATE {
+                updateGroupMembership(oldUsers, newUsers, oldMap, newMap);
+            }
+            when AFTER_DELETE {
+                updateGroupMembership(oldUsers, null, oldMap, null);
+            }
+            when AFTER_UNDELETE {
+                updateGroupMembership(null, newUsers, null, newMap);
+            }
+        }
+    }
+
+    public Boolean isValid(List<User> users) {
+        Boolean result = true;
+        if (users != null) {
+            for(User u : users) {
+                if (String.isBlank(u.LastName)) {
+                    u.LastName.addError(System.Label.USER_LAST_NAME_IS_REQUIRED);
+                    result = false;
+                }
+            }
+        }
+        return result;
+    }
+
+    private void updateGroupMembership(List<User> oldUsers, List<User> newUsers, Map<Id,User> oldMap, Map<Id,User> newMap) {
+        List<GroupMember> addMembers = new List<GroupMember>();
+        List<GroupMember> removeMembers = new List<GroupMember>();
+
+        Map<Id,GroupMember> members = new Map<Id,GroupMember>();
+        for (GroupMember m : [SELECT Id, GroupId, UserOrGroupId
+                                FROM GroupMember
+                                WITH SYSTEM_MODE
+        ]) {
+            members.put(m.UserOrGroupId, m);
+        }
+
+        for (User u : nvl(newUsers, oldUsers)) {
+            switch on this.operationType {
+                when AFTER_INSERT, AFTER_UNDELETE {
+                    if (u.ProfileId == this.profileId) {
+                        addMembers.add(new GroupMember(GroupId=this.groupId, UserOrGroupId=u.Id));
+                    }
+                }
+                when AFTER_UPDATE {
+                    User oldUser = oldMap.get(u.Id);
+                    User newUser = newMap.get(u.Id);
+                    if (oldUser.ProfileId != newUser.ProfileId) {
+                        if (oldUser.ProfileId == this.profileId) {
+                             Id groupMemberId = members.get(u.Id).Id;
+                             removeMembers.add(new GroupMember(Id=groupMemberId));
+                        }
+                        if (newUser.profileId == this.profileId) {
+                            addMembers.add(new GroupMember(GroupId=this.groupId, UserOrGroupId=u.Id));
+                        }
+                    }
+                }
+                when AFTER_DELETE {
+                    if (u.ProfileId == this.profileId) {
+                        removeMembers.add(new GroupMember(GroupId=this.groupId, UserOrGroupId=u.Id));
+                    }
+                }
+            }
+        }
+
+        if (!addMembers.isEmpty()) {
+            for (Database.SaveResult sr : Database.insert(addMembers, false)) {
+                if (!sr.isSuccess()) {
+                    for (Database.Error e : sr.getErrors()) {
+                        System.debug(LoggingLevel.ERROR, (this.apexClassName + ': ' + e.getStatusCode() + '|' + e.getMessage()));
+                    }
+                }
+            }
+        }
+
+        if (!removeMembers.isEmpty()) {
+            for (Database.DeleteResult dr : Database.delete(removeMembers, false)) {
+                if (!dr.isSuccess()) {
+                    for (Database.Error e : dr.getErrors()) {
+                        System.debug(LoggingLevel.ERROR, (this.apexClassName + ': ' + e.getStatusCode() + '|' + e.getMessage()));
+                    }
+                }
+            }
+        }
+    }
+
+    private List<User> nvl(List<User> list1, List<User> list2) {
+        return ((List1 != null) ? list1 : list2);
+    }
+}

@@ -5,7 +5,7 @@ private class OpportunityTriggerTest {
         Account a = new Account(
             Name    = 'Test Account',
             Phone   = '(000) 000-0000',
-            Website = 'www.foobar.com'
+            Website = 'www.testaccount.com'
         );
         insert a;
     }
@@ -43,11 +43,12 @@ private class OpportunityTriggerTest {
         );
         Test.startTest();
         insert o;
-        o.StageName = 'Closed Lost';
+        o.StageName = 'Closed Won';
         update o;
         Test.stopTest();
         System.assertEquals(1, [SELECT COUNT() FROM Opportunity]);
         System.assertEquals(true, [SELECT IsClosed FROM Opportunity WHERE Id = :o.Id LIMIT 1].IsClosed);
+        System.assertEquals(o.Amount, [SELECT Id, MaxOptyAmount__c FROM Account LIMIT 1].MaxOptyAmount__c);
     }
 
     @isTest
@@ -56,7 +57,7 @@ private class OpportunityTriggerTest {
         Opportunity o = new Opportunity(
             Name        = 'Test Opportunity #3',
             Description = 'FOR TESTING PURPOSES ONLY.',
-            StageName   = 'Prospecting',
+            StageName   = 'Closed Won',
             Amount      = 100000.00,
             Type        = 'New Business',
             CloseDate   = Date.today().addDays(28),
@@ -64,9 +65,11 @@ private class OpportunityTriggerTest {
         );
         Test.startTest();
         insert o;
+        System.assertEquals(o.Amount, [SELECT Id, MaxOptyAmount__c FROM Account LIMIT 1].MaxOptyAmount__c);
         delete o;
         Test.stopTest();
         System.assertEquals(0, [SELECT COUNT() FROM Opportunity]);
+        System.assertEquals(0, [SELECT Id, MaxOptyAmount__c FROM Account LIMIT 1].MaxOptyAmount__c);
     }
 
     @isTest
@@ -75,11 +78,12 @@ private class OpportunityTriggerTest {
         Opportunity o = new Opportunity(
             Name        = 'Test Opportunity #4',
             Description = 'FOR TESTING PURPOSES ONLY.',
-            StageName   = 'Prospecting',
+            StageName   = 'Closed Won',
             Amount      = 100000.00,
             Type        = 'New Business',
             CloseDate   = Date.today().addDays(28),
-            AccountId   = a.Id
+            AccountId   = a.Id,
+            Probability = 100
         );
         Test.startTest();
         insert o;
@@ -87,6 +91,7 @@ private class OpportunityTriggerTest {
         undelete o;
         Test.stopTest();
         System.assertEquals(1, [SELECT COUNT() FROM Opportunity]);
+        System.assertEquals(o.Amount, [SELECT Id, MaxOptyAmount__c FROM Account LIMIT 1].MaxOptyAmount__c);
     }
 
     @isTest
@@ -94,11 +99,11 @@ private class OpportunityTriggerTest {
         Account a = [SELECT Id, Name, Phone, Website FROM Account LIMIT 1];
         Opportunity o = new Opportunity(
             Name        = 'Test Opportunity #5',
-            Description = null,
+            Description = 'FOR TESTING PURPOSES ONLY.',
             StageName   = 'Prospecting',
             Amount      = 100000.00,
             Type        = 'New Business',
-            CloseDate   = Date.today().addDays(28),
+            CloseDate   = null,
             AccountId   = a.Id
         );
         Test.startTest();
