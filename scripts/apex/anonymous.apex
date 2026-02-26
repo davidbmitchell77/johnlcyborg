@@ -1,1 +1,5 @@
-System.debug(LoggingLevel.INFO, TriggerSetting__mdt.getInstance(Test.isRunningTest() ? 'Test' : 'Lead'));
+for (Account a : [SELECT Id, Name, (SELECT Id, Name FROM Contacts)
+                    FROM Account
+]) {
+    System.debug(LoggingLevel.INFO, System.JSON.serializePretty(a));
+}
