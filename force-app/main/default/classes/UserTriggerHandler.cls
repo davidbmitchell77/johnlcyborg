@@ -2,13 +2,13 @@ public with sharing class UserTriggerHandler {
     private final TriggerOperation operationType;
     private final String           apexClassName;
     private final String           groupId;
-    private final String           profileId;
+    private final String           sysAdminId;
 
     public UserTriggerHandler(TriggerOperation to) {
         this.operationType = to;
         this.apexClassName = String.valueOf(this).substring(0,String.valueOf(this).indexOf(':'));
         this.groupId       = [SELECT Id FROM Group WHERE DeveloperName = 'Admins' LIMIT 1].Id;
-        this.profileId     = [SELECT Id FROM Profile WHERE Name = 'System Administrator' LIMIT 1].Id;
+        this.sysAdminId    = [SELECT Id FROM Profile WHERE Name = 'System Administrator' LIMIT 1].Id;
     }
 
     public void run(List<User> oldUsers, List<User> newUsers, Map<Id,User> oldMap, Map<Id,User> newMap) {
@@ -60,7 +60,7 @@ public with sharing class UserTriggerHandler {
             Boolean removeFromGroup = false;
             switch on this.operationType {
                 when AFTER_INSERT {
-                    if (u.ProfileId == this.profileId) {
+                    if (u.ProfileId == this.sysAdminId) {
                         addToGroup = true;
                     }
                 }
@@ -68,15 +68,15 @@ public with sharing class UserTriggerHandler {
                     User oldUser = oldMap.get(u.Id);
                     User newUser = newMap.get(u.Id);
                     if (oldUser.ProfileId != newUser.ProfileId) {
-                        if (oldUser.ProfileId == this.profileId) {
+                        if (oldUser.ProfileId == this.sysAdminId) {
                              removeFromGroup = true;
                         }
-                        if (newUser.profileId == this.profileId) {
+                        if (newUser.profileId == this.sysAdminId) {
                             addToGroup = true;
                         }
                     }
                     if (oldUser.IsActive != newUser.IsActive) {
-                        if (u.ProfileId == this.profileId) {
+                        if (u.ProfileId == this.sysAdminId) {
                             if (u.IsActive == false) {
                                 removeFromGroup = true;
                             }
