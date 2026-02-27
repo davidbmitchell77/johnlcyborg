@@ -48,6 +48,8 @@ public with sharing class UserTriggerHandler {
         Map<Id,GroupMember> members = new Map<Id,GroupMember>();
         for (GroupMember m : [SELECT Id, GroupId, UserOrGroupId
                                 FROM GroupMember
+                               WHERE GroupId = :this.groupId
+                                 AND UserOrGroupId IN :newMap.keySet()
                                 WITH SYSTEM_MODE
         ]) {
             members.put(m.UserOrGroupId, m);
