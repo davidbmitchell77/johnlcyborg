@@ -11,6 +11,19 @@ public with sharing class UserTriggerHandler {
         this.sysAdminId    = [SELECT Id FROM Profile WHERE Name = 'System Administrator' LIMIT 1].Id;
     }
 
+    public Boolean isValid(List<User> users) {
+        Boolean result = true;
+        if (users != null) {
+            for(User u : users) {
+                if (String.isBlank(u.LastName)) {
+                    u.LastName.addError(System.Label.USER_LAST_NAME_IS_REQUIRED);
+                    result = false;
+                }
+            }
+        }
+        return result;
+    }
+
     public void run(List<User> oldUsers, List<User> newUsers, Map<Id,User> oldMap, Map<Id,User> newMap) {
         switch on this.operationType {
             when BEFORE_INSERT {
@@ -26,19 +39,6 @@ public with sharing class UserTriggerHandler {
                 updateGroupMembership(oldUsers, newUsers, oldMap, newMap);
             }
         }
-    }
-
-    public Boolean isValid(List<User> users) {
-        Boolean result = true;
-        if (users != null) {
-            for(User u : users) {
-                if (String.isBlank(u.LastName)) {
-                    u.LastName.addError(System.Label.USER_LAST_NAME_IS_REQUIRED);
-                    result = false;
-                }
-            }
-        }
-        return result;
     }
 
     private void updateGroupMembership(List<User> oldUsers, List<User> newUsers, Map<Id,User> oldMap, Map<Id,User> newMap) {
