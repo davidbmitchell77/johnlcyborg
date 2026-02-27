@@ -88,7 +88,7 @@ public with sharing class UserTriggerHandler {
                 }
             }
             if (removeFromGroup == true) { removeMembers.add(new GroupMember(Id=members.get(u.Id).Id));               } else
-            if (addToGroup == true     ) { addMembers.add(new GroupMember(GroupId=this.groupId, UserOrGroupId=u.Id)); }
+            if (addToGroup      == true) { addMembers.add(new GroupMember(GroupId=this.groupId, UserOrGroupId=u.Id)); }
         }
 
         if (!addMembers.isEmpty()) {
