@@ -55,7 +55,7 @@ public with sharing class UserTriggerHandler {
             members.put(m.UserOrGroupId, m);
         }
 
-        for (User u : nvl(newUsers, oldUsers)) {
+        for (User u : newUsers) {
             Boolean addToGroup = false;
             Boolean removeFromGroup = false;
             switch on this.operationType {
@@ -102,9 +102,5 @@ public with sharing class UserTriggerHandler {
                 if (!dr.isSuccess()) { for (Database.Error e : dr.getErrors()) { System.debug(LoggingLevel.ERROR, (this.apexClassName + ': ' + e.getStatusCode() + '|' + e.getMessage())); } }
             }
         }
-    }
-
-    private List<User> nvl(List<User> list1, List<User> list2) {
-        return ((List1 != null) ? list1 : list2);
     }
 }
