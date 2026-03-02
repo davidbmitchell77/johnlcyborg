@@ -29,7 +29,7 @@ public with sharing class AccountTriggerHandler {
 
             }
             when BEFORE_DELETE {
-
+                checkForChildOptys(oldAccounts, null, oldMap, null);
             }
             when AFTER_INSERT {
 
@@ -42,6 +42,25 @@ public with sharing class AccountTriggerHandler {
             }
             when AFTER_UNDELETE {
 
+            }
+        }
+    }
+
+    private void checkForChildOptys(List<Account> oldAccounts, List<Account> newAccounts, Map<Id,Account> oldMap, Map<Id,Account> newMap) {
+        Set<Id> accountIds = new Set<Id>();
+        for (AggregateResult agr : [SELECT AccountId, COUNT(Id) opportunities
+                                      FROM Opportunity
+                                     WHERE AccountId IN :oldMap.keySet()
+                                      WITH SYSTEM_MODE
+                                  GROUP BY AccountId
+                                    HAVING COUNT(Id) > 0
+        ]) {
+            accountIds.add((Id)agr.get('AccountId'));
+        }
+
+        for (Account a : oldAccounts) {
+            if (accountIds.contains(a.Id)) {
+                a.addError(System.Label.CANNOT_DELETE_ACCOUNT_WITH_CHILD_OPPORTUNITIES);
             }
         }
     }

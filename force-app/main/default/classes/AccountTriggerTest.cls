@@ -92,4 +92,30 @@ private class AccountTriggerTest {
         System.assertEquals(1, [SELECT COUNT() FROM Account]);
         Test.stopTest();
     }
+
+    @isTest
+     private static void test05_prevent_delete() {
+        Account a = [SELECT Id, Name, OwnerId FROM Account LIMIT 1];
+        Opportunity o = new Opportunity(
+            Name        = 'Test Opportunity #5',
+            Description = 'FOR TESTING PURPOSES ONLY.',
+            StageName   = 'Prospecting',
+            Amount      = 100000.00,
+            CloseDate   = Date.today().addDays(28),
+            Probability = 100,
+            Discount__c = 0.05,
+            AccountId   = a.Id
+        );
+        insert o;
+        System.assertEquals(1, [SELECT COUNT() FROM Opportunity]);
+        Test.startTest();
+        try {
+            delete a;
+        }
+        catch(Exception e) {
+            System.debug(LoggingLevel.WARN, e.getMessage());
+        }
+        Test.stopTest();
+        System.assertEquals(1, [SELECT COUNT() FROM Account]);
+    }
 }
