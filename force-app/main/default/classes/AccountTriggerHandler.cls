@@ -36,6 +36,7 @@ public with sharing class AccountTriggerHandler {
             }
             when AFTER_UPDATE {
                 updateChildContacts(oldAccounts, newAccounts, oldMap, newMap);
+                updateChildContactAddressess(oldAccounts, newAccounts, oldMap, newMap);
             }
             when AFTER_DELETE {
 
@@ -84,5 +85,53 @@ public with sharing class AccountTriggerHandler {
                 if (!sr.isSuccess()) { for (Database.Error e : sr.getErrors()) { System.debug(LoggingLevel.ERROR, (this.apexClassName + ': ' + e.getStatusCode() + '|' + e.getMessage())); } }
             }
         }
+    }
+
+    private void updateChildContactAddressess(List<Account> oldAccounts, List<Account> newAccounts, Map<Id,Account> oldMap, Map<Id,Account> newMap) {
+        List<Contact> contacts = new List<Contact>();
+
+        Map<Id,Account> accounts = new Map<Id,Account>();
+        for (Account a : [SELECT Id, (SELECT Id, AccountId, Name FROM Contacts)
+                            FROM Account
+                           WHERE Id IN :newMap.keySet()
+                            WITH SYSTEM_MODE
+        ]) {
+            accounts.put(a.Id, a);
+        }
+
+        for (Account a : newAccounts) {
+            Account oldAccount = oldMap.get(a.Id);
+            Account newAccount = newMap.get(a.Id);
+            if (isAddressChange(oldAccount, newAccount)) {
+                for (Contact c : accounts.get(a.Id).Contacts) {
+                    c.MailingStreet     = a.BillingStreet;
+                    c.MailingCity       = a.BillingCity;
+                    c.MailingState      = a.BillingState;
+                    c.MailingPostalCode = a.BillingPostalCode;
+                    c.MailingCountry    = a.BillingCountry;
+                    c.MailingLatitude   = a.BillingLatitude;
+                    c.MailingLongitude  = a.BillingLongitude;
+                    contacts.add(c);
+                }
+            }
+        }
+
+        if (!contacts.isEmpty()) {
+            for (Database.SaveResult sr : Database.update(contacts, false, AccessLevel.SYSTEM_MODE)) {
+                if (!sr.isSuccess()) { for (Database.Error e : sr.getErrors()) { System.debug(LoggingLevel.ERROR, (this.apexClassName + ': ' + e.getStatusCode() + '|' + e.getMessage())); } }
+            }
+        }
+    }
+
+    private Boolean isAddressChange(Account oldAccount, Account newAccount) {
+        Boolean result = false;
+        if (oldAccount.BillingStreet     != newAccount.BillingStreet    ) { result = true; }
+        if (oldAccount.BillingCity       != newAccount.BillingCity      ) { result = true; }
+        if (oldAccount.BillingState      != newAccount.BillingState     ) { result = true; }
+        if (oldAccount.BillingPostalCode != newAccount.BillingPostalCode) { result = true; }
+        if (oldAccount.BillingCountry    != newAccount.BillingCountry   ) { result = true; }
+        if (oldAccount.BillingLatitude   != newAccount.BillingLatitude  ) { result = true; }
+        if (oldAccount.BillingLongitude  != newAccount.BillingLongitude ) { result = true; }
+        return result;
     }
 }

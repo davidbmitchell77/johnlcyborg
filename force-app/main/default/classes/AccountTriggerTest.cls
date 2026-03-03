@@ -17,10 +17,15 @@ private class AccountTriggerTest {
         );
         insert u;
         Account a = new Account(
-            Name         = 'Test Account',
-            RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('Patient').getRecordTypeId(),
-            Website      = 'www.foobar.com',
-            OwnerId      = UserInfo.getUserId()
+            Name              = 'Test Account',
+            RecordTypeId      = Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get('Patient').getRecordTypeId(),
+            Website           = 'www.foobar.com',
+            OwnerId           = UserInfo.getUserId(),
+            BillingStreet     = '686 SIXTH AVE',
+            BillingCity       = 'New York',
+            BillingState      = 'New York',
+            BillingPostalCode = '10068',
+            BillingCountry    = 'United States'
         );
         insert a;
         List<Contact> contacts = new List<Contact>();
@@ -40,19 +45,27 @@ private class AccountTriggerTest {
 
     @isTest
      private static void test01_update() {
+        Account a = [SELECT Id, Name, OwnerId, BillingAddress FROM Account LIMIT 1];
         User u = [SELECT Id, Username, ProfileId FROM User LIMIT 1];
         for (Contact c : [SELECT Id, AccountId, OwnerId FROM Contact]) {
             System.assertNotEquals(c.OwnerId, u.Id);
         }
         Test.startTest();
         System.runAs (u) {
-            Account a = [SELECT Id, Name, OwnerId FROM Account LIMIT 1];
-            a.OwnerId = UserInfo.getUserId();
+            a.OwnerId           = UserInfo.getUserId();
+            a.BillingStreet     = '123 MAIN ST';
+            a.BillingCity       = 'Irvine';
+            a.BillingState      = 'California';
+            a.BillingPostalCode = '91707';
+            a.BillingCountry    = 'United States';
+            a.BillingLatitude   = 33.7490;
+            a.BillingLongitude  = -117.8608;
             update a;
         }
         Test.stopTest();
-        for (Contact c : [SELECT Id, AccountId, OwnerId FROM Contact]) {
+        for (Contact c : [SELECT Id, AccountId, OwnerId, MailingStreet FROM Contact]) {
             System.assertEquals(c.ownerId, u.Id);
+            System.assertEquals(c.MailingStreet, a.BillingStreet);
         }
     }
 
