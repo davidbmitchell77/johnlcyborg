@@ -22,7 +22,7 @@ trigger CaseTrigger on Case (before insert, before update, before delete, after 
             runTriggerHandler = ts.AfterDelete__c;
         }
         when AFTER_UNDELETE {
-            runTriggerHandler = ts.AfterUnDelete__c;
+            runTriggerHandler = ts.AfterUndelete__c;
         }
     }
 
