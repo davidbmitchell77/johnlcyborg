@@ -75,7 +75,7 @@ public with sharing class AccountTriggerHandler {
                             WITH SYSTEM_MODE
         ]) {
             if (c.OwnerId != newMap.get(c.AccountId).OwnerId) {
-                c.OwnerId = newMap.get(c.AccountId).OwnerId;
+                c.OwnerId =  newMap.get(c.AccountId).OwnerId;
                 contacts.add(c);
             }
         }
