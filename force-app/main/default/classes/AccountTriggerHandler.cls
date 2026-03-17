@@ -125,12 +125,12 @@ public with sharing class AccountTriggerHandler {
 
     private Boolean isAddressChange(Account oldAccount, Account newAccount) {
         Boolean result = false;
-        if (oldAccount.BillingStreet     != newAccount.BillingStreet    ) { result = true; }
-        if (oldAccount.BillingCity       != newAccount.BillingCity      ) { result = true; }
-        if (oldAccount.BillingState      != newAccount.BillingState     ) { result = true; }
-        if (oldAccount.BillingPostalCode != newAccount.BillingPostalCode) { result = true; }
-        if (oldAccount.BillingCountry    != newAccount.BillingCountry   ) { result = true; }
-        if (oldAccount.BillingLatitude   != newAccount.BillingLatitude  ) { result = true; }
+        if (oldAccount.BillingStreet     != newAccount.BillingStreet    ) { result = true; } else
+        if (oldAccount.BillingCity       != newAccount.BillingCity      ) { result = true; } else
+        if (oldAccount.BillingState      != newAccount.BillingState     ) { result = true; } else
+        if (oldAccount.BillingPostalCode != newAccount.BillingPostalCode) { result = true; } else
+        if (oldAccount.BillingCountry    != newAccount.BillingCountry   ) { result = true; } else
+        if (oldAccount.BillingLatitude   != newAccount.BillingLatitude  ) { result = true; } else
         if (oldAccount.BillingLongitude  != newAccount.BillingLongitude ) { result = true; }
         return result;
     }

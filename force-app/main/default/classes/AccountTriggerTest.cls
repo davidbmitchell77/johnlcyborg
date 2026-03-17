@@ -61,6 +61,8 @@ private class AccountTriggerTest {
             a.BillingLatitude   = 33.7490;
             a.BillingLongitude  = -117.8608;
             update a;
+            a.BillingLongitude  = -118.8608;
+            update a;
         }
         Test.stopTest();
         for (Contact c : [SELECT Id, AccountId, OwnerId, MailingStreet FROM Contact]) {
