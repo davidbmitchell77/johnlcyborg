@@ -1,0 +1,19 @@
+{
+  "folders": [
+    {
+      "path": "/home/davidbmitchell77/.repos/johnlcyborg"
+    }
+  ],
+  "settings": {
+    "eslint.workingDirectories": [
+      "/home/davidbmitchell77/.repos/johnlcyborg"
+    ],
+    "eslint.validate": [
+      "javascript",
+      "typescript"
+    ],
+    "eslint.options": {
+      "overrideConfigFile": "/home/davidbmitchell77/.repos/johnlcyborg/.eslintrc.json"
+    }
+  }
+}
