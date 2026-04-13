@@ -112,4 +112,18 @@
         <shortDescription>USER_LAST_NAME_IS_REQUIRED</shortDescription>
         <value>User last name is required.</value>
     </labels>
+    <labels>
+        <fullName>OPPORTUNITY_LINE_ITEM_QUANTITY_IS_REQUIRED</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>OPPORTUNITY_LINE_ITEM_QUANTITY_IS_REQUIRED</shortDescription>
+        <value>Opportunity line item quantity is required.</value>
+    </labels>
+    <labels>
+        <fullName>OPPORTUNITY_NAME_IS_REQUIRED</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>OPPORTUNITY_NAME_IS_REQUIRED</shortDescription>
+        <value>Opportunity name is required.</value>
+    </labels>
 </CustomLabels>
