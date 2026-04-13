@@ -42,7 +42,7 @@ private class OpportunityLineItemTriggerTest {
         OpportunityLineItem oli = new OpportunityLineItem(
             OpportunityId    = o.Id,
             PricebookEntryId = pbe.Id,
-            Quantity         = 5,
+            Quantity         = 5.00,
             UnitPrice        = 100.00 // You can set UnitPrice OR TotalPrice, but not both
         );
         insert oli;
@@ -59,13 +59,13 @@ private class OpportunityLineItemTriggerTest {
         OpportunityLineItem oli = new OpportunityLineItem(
             OpportunityId    = o.Id,
             PricebookEntryId = pbe.Id,
-            Quantity         = 5,
-            UnitPrice        = 100.00 // You can set UnitPrice OR TotalPrice, but not both
+            Quantity         = 5.00,
+            UnitPrice        = 100.00
         );
         insert oli;
         System.assertEquals(500.00, [SELECT Id, TotalPrice FROM OpportunityLineItem].Totalprice);
         Test.startTest();
-        oli.Quantity = 10;
+        oli.Quantity = 10.00;
         update oli;
         Test.stopTest();
         System.assertEquals(1000.00, [SELECT Id, TotalPrice FROM OpportunityLineItem].Totalprice);
@@ -79,7 +79,7 @@ private class OpportunityLineItemTriggerTest {
         OpportunityLineItem oli = new OpportunityLineItem(
             OpportunityId    = o.Id,
             PricebookEntryId = pbe.Id,
-            Quantity         = 5,
+            Quantity         = 5.00,
             UnitPrice        = 100.00 // You can set UnitPrice OR TotalPrice, but not both
         );
         insert oli;
@@ -101,7 +101,7 @@ private class OpportunityLineItemTriggerTest {
         OpportunityLineItem oli = new OpportunityLineItem(
             OpportunityId    = o.Id,
             PricebookEntryId = pbe.Id,
-            Quantity         = 0,
+            Quantity         = 0.00,
             UnitPrice        = 100.00
         );
         try {
