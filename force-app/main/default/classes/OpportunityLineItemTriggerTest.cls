@@ -43,7 +43,7 @@ private class OpportunityLineItemTriggerTest {
             OpportunityId    = o.Id,
             PricebookEntryId = pbe.Id,
             Quantity         = 5.00,
-            UnitPrice        = 100.00 // You can set UnitPrice OR TotalPrice, but not both
+            UnitPrice        = 100.00
         );
         insert oli;
         Test.stopTest();
@@ -80,7 +80,7 @@ private class OpportunityLineItemTriggerTest {
             OpportunityId    = o.Id,
             PricebookEntryId = pbe.Id,
             Quantity         = 5.00,
-            UnitPrice        = 100.00 // You can set UnitPrice OR TotalPrice, but not both
+            UnitPrice        = 100.00
         );
         insert oli;
         System.assertEquals(1, [SELECT COUNT() FROM OpportunityLineItem]);
