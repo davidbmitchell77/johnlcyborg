@@ -63,12 +63,12 @@ private class OpportunityLineItemTriggerTest {
             UnitPrice        = 100.00
         );
         insert li;
-        System.assertEquals(500.00, [SELECT Id, TotalPrice FROM OpportunityLineItem].Totalprice);
+        System.assertEquals(500.00, [SELECT Id, TotalPrice FROM OpportunityLineItem].TotalPrice);
         Test.startTest();
         li.Quantity = 10.00;
         update li;
         Test.stopTest();
-        System.assertEquals(1000.00, [SELECT Id, TotalPrice FROM OpportunityLineItem].Totalprice);
+        System.assertEquals(1000.00, [SELECT Id, TotalPrice FROM OpportunityLineItem].TotalPrice);
     }
 
     @isTest
