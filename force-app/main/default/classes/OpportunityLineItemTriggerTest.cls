@@ -39,13 +39,13 @@ private class OpportunityLineItemTriggerTest {
         Opportunity o      = [SELECT Id, Name FROM Opportunity WHERE AccountId = :a.Id LIMIT 1];
         PricebookEntry pbe = [SELECT Id, Product2.Name FROM PricebookEntry LIMIT 1];
         Test.startTest();
-        OpportunityLineItem oli = new OpportunityLineItem(
+        OpportunityLineItem li = new OpportunityLineItem(
             OpportunityId    = o.Id,
             PricebookEntryId = pbe.Id,
             Quantity         = 5.00,
             UnitPrice        = 100.00
         );
-        insert oli;
+        insert li;
         Test.stopTest();
         System.assertEquals(1, [SELECT COUNT() FROM OpportunityLineItem]);
         System.assertEquals(1, [SELECT Id, OpportunityLineItems__c FROM Account WHERE Id = :a.Id].OpportunityLineItems__c);
@@ -56,17 +56,17 @@ private class OpportunityLineItemTriggerTest {
         Account     a      = [SELECT Id, Name FROM Account LIMIT 1];
         Opportunity o      = [SELECT Id, Name FROM Opportunity WHERE AccountId = :a.Id LIMIT 1];
         PricebookEntry pbe = [SELECT Id, Product2.Name FROM PricebookEntry LIMIT 1];
-        OpportunityLineItem oli = new OpportunityLineItem(
+        OpportunityLineItem li = new OpportunityLineItem(
             OpportunityId    = o.Id,
             PricebookEntryId = pbe.Id,
             Quantity         = 5.00,
             UnitPrice        = 100.00
         );
-        insert oli;
+        insert li;
         System.assertEquals(500.00, [SELECT Id, TotalPrice FROM OpportunityLineItem].Totalprice);
         Test.startTest();
-        oli.Quantity = 10.00;
-        update oli;
+        li.Quantity = 10.00;
+        update li;
         Test.stopTest();
         System.assertEquals(1000.00, [SELECT Id, TotalPrice FROM OpportunityLineItem].Totalprice);
     }
@@ -76,17 +76,17 @@ private class OpportunityLineItemTriggerTest {
         Account     a      = [SELECT Id, Name FROM Account LIMIT 1];
         Opportunity o      = [SELECT Id, Name FROM Opportunity WHERE AccountId = :a.Id LIMIT 1];
         PricebookEntry pbe = [SELECT Id, Product2.Name FROM PricebookEntry LIMIT 1];
-        OpportunityLineItem oli = new OpportunityLineItem(
+        OpportunityLineItem li = new OpportunityLineItem(
             OpportunityId    = o.Id,
             PricebookEntryId = pbe.Id,
             Quantity         = 5.00,
             UnitPrice        = 100.00
         );
-        insert oli;
+        insert li;
         System.assertEquals(1, [SELECT COUNT() FROM OpportunityLineItem]);
         System.assertEquals(1, [SELECT Id, OpportunityLineItems__c FROM Account WHERE Id = :a.Id].OpportunityLineItems__c);
         Test.startTest();
-        delete oli;
+        delete li;
         Test.stopTest();
         System.assertEquals(0, [SELECT COUNT() FROM OpportunityLineItem]);
         System.assertEquals(0, [SELECT Id, OpportunityLineItems__c FROM Account WHERE Id = :a.Id].OpportunityLineItems__c);
@@ -98,14 +98,14 @@ private class OpportunityLineItemTriggerTest {
         Opportunity o      = [SELECT Id, Name FROM Opportunity WHERE AccountId = :a.Id LIMIT 1];
         PricebookEntry pbe = [SELECT Id, Product2.Name FROM PricebookEntry LIMIT 1];
         Test.startTest();
-        OpportunityLineItem oli = new OpportunityLineItem(
+        OpportunityLineItem li = new OpportunityLineItem(
             OpportunityId    = o.Id,
             PricebookEntryId = pbe.Id,
             Quantity         = 0.00,
             UnitPrice        = 100.00
         );
         try {
-            insert oli;
+            insert li;
         }
         catch(DmlException e) {
             System.debug(LoggingLevel.ERROR, ('OpportunityLineItemTriggerTest.test04_validate: ' + e.getDmlType(0) + '|' + e.getDmlMessage(0)));
