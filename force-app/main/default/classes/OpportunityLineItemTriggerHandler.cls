@@ -32,7 +32,6 @@ public with sharing class OpportunityLineItemTriggerHandler {
 
             }
             when AFTER_INSERT {
-                resequenceLineItems(null, newItems, null, newMap);
                 updateParentAccounts(null, newItems, null, newMap);
             }
             when AFTER_UPDATE {
@@ -74,14 +73,33 @@ public with sharing class OpportunityLineItemTriggerHandler {
     private void resequenceLineItems(List<OpportunityLineItem> oldItems, List<OpportunityLineItem> newItems, Map<Id,OpportunityLineItem> oldMap, Map<Id,OpportunityLineItem> newMap) {
         List<OpportunityLineItem> lineItems = new List<OpportunityLineItem>();
 
+        Map<Id,Integer> iMap = new Map<Id,Integer>();
+        for (OpportunityLineItem li : nvl(newItems, oldItems)) {
+            if (li.OpportunityId != null) {
+                if (!iMap.containsKey(li.OpportunityId)) {
+                    iMap.put(li.OpportunityId, 0);
+                }
+            }
+        }
+
+        for (AggregateResult agr : [SELECT OpportunityId, MAX(LineItem__c) maxLineItem
+                                      FROM OpportunityLineItem
+                                     WHERE OpportunityId IN :iMap.keySet()
+                                      WITH SYSTEM_MODE
+                                  GROUP BY OpportunityId
+        ]) {
+            iMap.put((Id)agr.get('OpportunityId'), ((Decimal)agr.get('maxLineItem')).intValue());
+        }
+
         Integer i = 0;
-        for (OpportunityLineItem li : [SELECT Id, LineItem__c
+        for (OpportunityLineItem li : [SELECT Id, OpportunityId, LineItem__c
                                          FROM OpportunityLineItem
-                                        WHERE Id IN :nvl(newMap, oldMap).keySet()
+                                        WHERE OpportunityId IN :iMap.keySet()
                                          WITH SYSTEM_MODE
                                      ORDER BY Id ASC
         ]) {
-            li.LineItem__c = ++i;
+            li.LineItem__c = iMap.get(li.OpportunityId) + 1;
+            iMap.put(li.OpportunityId, (Integer)li.LineItem__c);
             lineItems.add(li);
         }
 
@@ -153,9 +171,5 @@ public with sharing class OpportunityLineItemTriggerHandler {
 
     private List<OpportunityLineItem> nvl(List<OpportunityLineItem> list1, List<OpportunityLineItem> list2) {
         return ((list1 != null) ? list1 : list2);
-    }
-
-    private Map<Id,OpportunityLineItem> nvl(Map<Id,OpportunityLineItem> map1, Map<Id,OpportunityLineItem> map2) {
-        return ((map1 != null) ? map1 : map2);
     }
 }
