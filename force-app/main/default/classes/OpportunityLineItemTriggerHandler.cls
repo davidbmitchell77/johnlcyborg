@@ -57,7 +57,7 @@ public with sharing class OpportunityLineItemTriggerHandler {
             ].LineItem__c;
         }
         catch(Exception e) {
-            System.debug(LoggingLevel.WARN, (this.apexclassName + ': ' + e.getMessage()));
+            System.debug(LoggingLevel.WARN, (this.apexclassName + ': ' + e.getTypeName() + '|' + e.getMessage()));
         }
 
         for (OpportunityLineItem li : newItems) {
