@@ -52,8 +52,8 @@ private class OpportunityLineItemTriggerTest {
             OpportunityLineItem li = new OpportunityLineItem(
                 OpportunityId    = o.Id,
                 PricebookEntryId = pbes[i].Id,
-                Quantity         = 10.00,
-                UnitPrice        = pbes[i].UnitPrice
+                UnitPrice        = pbes[i].UnitPrice,
+                Quantity         = 10.00
             );
             lineItems.add(li);
         }
@@ -68,12 +68,12 @@ private class OpportunityLineItemTriggerTest {
     private static void test02_update() {
         Account     a      = [SELECT Id, Name FROM Account LIMIT 1];
         Opportunity o      = [SELECT Id, Name FROM Opportunity WHERE AccountId = :a.Id LIMIT 1];
-        PricebookEntry pbe = [SELECT Id, Product2.Name FROM PricebookEntry LIMIT 1];
+        PricebookEntry pbe = [SELECT Id, Product2.Name, UnitPrice FROM PricebookEntry LIMIT 1];
         OpportunityLineItem li = new OpportunityLineItem(
             OpportunityId    = o.Id,
             PricebookEntryId = pbe.Id,
-            Quantity         = 5.00,
-            UnitPrice        = 100.00
+            UnitPrice        = pbe.UnitPrice,
+            Quantity         = 5.00
         );
         insert li;
         System.assertEquals(500.00, [SELECT Id, TotalPrice FROM OpportunityLineItem].TotalPrice);
@@ -88,12 +88,12 @@ private class OpportunityLineItemTriggerTest {
     private static void test03_delete() {
         Account     a      = [SELECT Id, Name FROM Account LIMIT 1];
         Opportunity o      = [SELECT Id, Name FROM Opportunity WHERE AccountId = :a.Id LIMIT 1];
-        PricebookEntry pbe = [SELECT Id, Product2.Name FROM PricebookEntry LIMIT 1];
+        PricebookEntry pbe = [SELECT Id, Product2.Name, UnitPrice FROM PricebookEntry LIMIT 1];
         OpportunityLineItem li = new OpportunityLineItem(
             OpportunityId    = o.Id,
             PricebookEntryId = pbe.Id,
-            Quantity         = 5.00,
-            UnitPrice        = 100.00
+            UnitPrice        = pbe.UnitPrice,
+            Quantity         = 5.00
         );
         insert li;
         System.assertEquals(1, [SELECT COUNT() FROM OpportunityLineItem]);
@@ -109,13 +109,13 @@ private class OpportunityLineItemTriggerTest {
     private static void test04_validate() {
         Account     a      = [SELECT Id, Name FROM Account LIMIT 1];
         Opportunity o      = [SELECT Id, Name FROM Opportunity WHERE AccountId = :a.Id LIMIT 1];
-        PricebookEntry pbe = [SELECT Id, Product2.Name FROM PricebookEntry LIMIT 1];
+        PricebookEntry pbe = [SELECT Id, Product2.Name, UnitPrice FROM PricebookEntry LIMIT 1];
         Test.startTest();
         OpportunityLineItem li = new OpportunityLineItem(
             OpportunityId    = o.Id,
             PricebookEntryId = pbe.Id,
-            Quantity         = 0.00,
-            UnitPrice        = 100.00
+            UnitPrice        = pbe.UnitPrice,
+            Quantity         = 0.00
         );
         try {
             insert li;
