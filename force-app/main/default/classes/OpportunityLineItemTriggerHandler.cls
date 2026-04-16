@@ -45,27 +45,27 @@ public with sharing class OpportunityLineItemTriggerHandler {
     }
 
     private void sequenceLineItems(List<OpportunityLineItem> oldItems, List<OpportunityLineItem> newItems, Map<Id,OpportunityLineItem> oldMap, Map<Id,OpportunityLineItem> newMap) {
-        Map<Id,Integer> i = new Map<Id,Integer>();
+        Map<Id,Integer> iMap = new Map<Id,Integer>();
         for (OpportunityLineItem li : newItems) {
             if (li.OpportunityId != null) {
-                if (!i.containsKey(li.OpportunityId)) {
-                    i.put(li.OpportunityId, 0);
+                if (!iMap.containsKey(li.OpportunityId)) {
+                    iMap.put(li.OpportunityId, 0);
                 }
             }
         }
 
         for (AggregateResult agr : [SELECT OpportunityId, MAX(LineItem__c) maxLineItem
                                       FROM OpportunityLineItem
-                                     WHERE opportunityId IN :i.keySet()
+                                     WHERE opportunityId IN :iMap.keySet()
                                       WITH SYSTEM_MODE
                                   GROUP BY OpportunityId
         ]) {
-            i.put((Id)agr.get('OpportunityId'), ((Decimal)agr.get('maxLineItem')).intValue());
+            iMap.put((Id)agr.get('OpportunityId'), ((Decimal)agr.get('maxLineItem')).intValue());
         }
 
         for (OpportunityLineItem li : newItems) {
-            li.LineItem__c = (i.get(li.OpportunityId) + 1);
-            i.put(li.OpportunityId, (Integer)li.LineItem__c);
+            li.LineItem__c = (iMap.get(li.OpportunityId) + 1);
+            iMap.put(li.OpportunityId, (Integer)li.LineItem__c);
         }
     }
 
