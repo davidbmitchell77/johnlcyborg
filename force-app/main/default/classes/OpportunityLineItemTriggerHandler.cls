@@ -81,8 +81,7 @@ public with sharing class OpportunityLineItemTriggerHandler {
 
         if (!lineItems.isEmpty()) {
             for (Database.SaveResult sr : Database.update(lineItems, false, AccessLevel.SYSTEM_MODE)) {
-                if (!sr.isSuccess()) {
-                    for (Database.Error e : sr.getErrors()) { System.debug(LoggingLevel.ERROR, (this.apexClassName + ': ' + e.getStatusCode() + '|' + e.getMessage())); } }
+                if (!sr.isSuccess()) { for (Database.Error e : sr.getErrors()) { System.debug(LoggingLevel.ERROR, (this.apexClassName + ': ' + e.getStatusCode() + '|' + e.getMessage())); } }
             }
         }
     }

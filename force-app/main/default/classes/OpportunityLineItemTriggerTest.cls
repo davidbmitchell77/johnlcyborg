@@ -48,6 +48,7 @@ private class OpportunityLineItemTriggerTest {
         insert li;
         Test.stopTest();
         System.assertEquals(1, [SELECT COUNT() FROM OpportunityLineItem]);
+        System.assertEquals(1, [SELECT Id, LineItem__c FROM OpportunityLineItem LIMIT 1].LineItem__c);
         System.assertEquals(1, [SELECT Id, OpportunityLineItems__c FROM Account WHERE Id = :a.Id].OpportunityLineItems__c);
     }
 
