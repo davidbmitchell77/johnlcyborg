@@ -19,37 +19,49 @@ private class OpportunityLineItemTriggerTest {
             AccountId   = a.Id
         );
         insert o;
-        Product2 p = new Product2(
-            Name     = 'Test Product',
-            IsActive = true
-        );
-        insert p;
-        PricebookEntry pbe = new PricebookEntry(
-            Pricebook2Id = Test.getStandardPricebookId(),
-            Product2Id   = p.Id,
-            UnitPrice    = 100.00,
-            IsActive     = true
-        );
-        insert pbe;
+        List<Product2> products = new List<Product2>();
+        for (Integer i=1; i<=10; i++) {
+            Product2 p = new Product2(
+                Name     = 'Test Product #' + i,
+                IsActive = true
+            );
+            products.add(p);
+        }
+        insert products;
+        List<PricebookEntry> priceBookEntries = new List<PricebookEntry>();
+        for (Integer i=0; i<10; i++) {
+            PricebookEntry pbe = new PricebookEntry(
+                Pricebook2Id = Test.getStandardPricebookId(),
+                Product2Id   = products[i].Id,
+                UnitPrice    = (100.00 * (i + 1)),
+                IsActive     = true
+            );
+            priceBookEntries.add(pbe);
+        }
+        insert priceBookEntries;
     }
 
     @isTest
     private static void test01_insert() {
-        Account     a      = [SELECT Id, Name FROM Account LIMIT 1];
-        Opportunity o      = [SELECT Id, Name FROM Opportunity WHERE AccountId = :a.Id LIMIT 1];
-        PricebookEntry pbe = [SELECT Id, Product2.Name FROM PricebookEntry LIMIT 1];
+        Account     a             = [SELECT Id, Name FROM Account LIMIT 1];
+        Opportunity o             = [SELECT Id, Name FROM Opportunity WHERE AccountId = :a.Id LIMIT 1];
+        List<PricebookEntry> pbes = [SELECT Id, Product2.Name, UnitPrice FROM PricebookEntry];
         Test.startTest();
-        OpportunityLineItem li = new OpportunityLineItem(
-            OpportunityId    = o.Id,
-            PricebookEntryId = pbe.Id,
-            Quantity         = 5.00,
-            UnitPrice        = 100.00
-        );
-        insert li;
+        List<OpportunityLineItem> lineItems = new List<OpportunityLineItem>();
+        for (Integer i=0; i<10; i++) {
+            OpportunityLineItem li = new OpportunityLineItem(
+                OpportunityId    = o.Id,
+                PricebookEntryId = pbes[i].Id,
+                Quantity         = 10.00,
+                UnitPrice        = pbes[i].UnitPrice
+            );
+            lineItems.add(li);
+        }
+        insert lineItems;
         Test.stopTest();
-        System.assertEquals(1, [SELECT COUNT() FROM OpportunityLineItem]);
-        System.assertEquals(1, [SELECT Id, LineItem__c FROM OpportunityLineItem LIMIT 1].LineItem__c);
-        System.assertEquals(1, [SELECT Id, OpportunityLineItems__c FROM Account WHERE Id = :a.Id].OpportunityLineItems__c);
+        System.assertEquals(10, [SELECT COUNT() FROM OpportunityLineItem]);
+        System.assertEquals(10, [SELECT Id, LineItem__c FROM OpportunityLineItem ORDER BY LineItem__c DESC LIMIT 1].LineItem__c);
+        System.assertEquals(10, [SELECT Id, OpportunityLineItems__c FROM Account WHERE Id = :a.Id].OpportunityLineItems__c);
     }
 
     @isTest
