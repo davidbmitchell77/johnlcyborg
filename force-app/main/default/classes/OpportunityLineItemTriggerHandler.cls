@@ -61,7 +61,7 @@ public with sharing class OpportunityLineItemTriggerHandler {
                                       WITH SYSTEM_MODE
                                   GROUP BY OpportunityId
         ]) {
-            i.put((Id)agr.get('OpportunityId'), (Integer)agr.get('maxLineItem'));
+            i.put((Id)agr.get('OpportunityId'), ((Decimal)agr.get('maxLineItem')).intValue());
         }
 
         for (OpportunityLineItem li : newItems) {

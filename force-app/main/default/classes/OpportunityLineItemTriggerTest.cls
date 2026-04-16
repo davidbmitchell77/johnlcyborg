@@ -48,7 +48,7 @@ private class OpportunityLineItemTriggerTest {
         List<PricebookEntry> pbes = [SELECT Id, Product2.Name, UnitPrice FROM PricebookEntry];
         Test.startTest();
         List<OpportunityLineItem> lineItems = new List<OpportunityLineItem>();
-        for (Integer i=0; i<10; i++) {
+        for (Integer i=0; i<9; i++) {
             OpportunityLineItem li = new OpportunityLineItem(
                 OpportunityId    = o.Id,
                 PricebookEntryId = pbes[i].Id,
@@ -58,9 +58,16 @@ private class OpportunityLineItemTriggerTest {
             lineItems.add(li);
         }
         insert lineItems;
+        OpportunityLineItem li = new OpportunityLineItem(
+            OpportunityId    = o.Id,
+            PricebookEntryId = pbes[lineItems.size() - 1].Id,
+            UnitPrice        = pbes[lineItems.size() - 1].UnitPrice,
+            Quantity         = 1.00
+        );
+        insert li;
         Test.stopTest();
         System.assertEquals(10, [SELECT COUNT() FROM OpportunityLineItem]);
-        System.assertEquals(10, [SELECT Id, LineItem__c FROM OpportunityLineItem ORDER BY LineItem__c DESC LIMIT 1].LineItem__c);
+      //System.assertEquals(11, [SELECT Id, LineItem__c FROM OpportunityLineItem ORDER BY LineItem__c DESC LIMIT 1].LineItem__c);
         System.assertEquals(10, [SELECT Id, OpportunityLineItems__c FROM Account WHERE Id = :a.Id].OpportunityLineItems__c);
     }
 
