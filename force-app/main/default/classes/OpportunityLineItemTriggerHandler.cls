@@ -65,13 +65,13 @@ public with sharing class OpportunityLineItemTriggerHandler {
             i.put((Id)agr.get('OpportunityId'), nvl(((Decimal)agr.get('maxLineItem')), 0.00).intValue());
         }
 
-        if (this.operationType == Triggeroperation.BEFORE_INSERT) {
+        if (this.operationType == TriggerOperation.BEFORE_INSERT) {
             for (OpportunityLineItem li : newItems) {
                 li.LineItem__c = (i.get(li.OpportunityId) + 1);
                 i.put(li.OpportunityId, (Integer)li.LineItem__c);
             }
         }
-        else if (this.operationType == Triggeroperation.AFTER_DELETE) {
+        else if (this.operationType == TriggerOperation.AFTER_DELETE) {
             for (OpportunityLineItem li : [SELECT Id, OpportunityId, LineItem__c
                                              FROM OpportunityLineItem
                                             WHERE OpportunityId IN :i.keySet()
