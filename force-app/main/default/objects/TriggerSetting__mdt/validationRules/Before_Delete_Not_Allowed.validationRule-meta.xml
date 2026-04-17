@@ -2,8 +2,8 @@
 <ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Before_Delete_Not_Allowed</fullName>
     <active>true</active>
-    <description>Before Delete is not allowed on User object.</description>
+    <description>Before Delete is not allowed on this object.</description>
     <errorConditionFormula>AND(MasterLabel = &quot;User&quot;, BeforeDelete__c = true)</errorConditionFormula>
-    <errorDisplayField>AfterDelete__c</errorDisplayField>
-    <errorMessage>Before Delete is not allowed on User object.</errorMessage>
+    <errorDisplayField>BeforeDelete__c</errorDisplayField>
+    <errorMessage>Before Delete is not allowed on this object.</errorMessage>
 </ValidationRule>
