@@ -23,7 +23,7 @@ public with sharing class OpportunityLineItemTriggerHandler {
     public void run(List<OpportunityLineItem> oldItems, List<OpportunityLineItem> newItems, Map<Id,OpportunityLineItem> oldMap, Map<Id,OpportunityLineItem> newMap) {
         switch on this.operationType {
             when BEFORE_INSERT {
-                sequenceLineItems(null, newItems, null, null);
+                resequenceLineItems(null, newItems, null, null);
             }
             when BEFORE_UPDATE {
 
@@ -44,32 +44,6 @@ public with sharing class OpportunityLineItemTriggerHandler {
         }
     }
 
-    private void sequenceLineItems(List<OpportunityLineItem> oldItems, List<OpportunityLineItem> newItems, Map<Id,OpportunityLineItem> oldMap, Map<Id,OpportunityLineItem> newMap) {
-        Map<Id,Integer> i = new Map<Id,Integer>();
-        for (OpportunityLineItem li : newItems) {
-            if (li.OpportunityId != null) {
-                if (!i.containsKey(li.OpportunityId)) {
-                    i.put(li.OpportunityId, 0);
-                }
-            }
-        }
-
-        for (AggregateResult agr : [SELECT OpportunityId, MAX(LineItem__c) maxLineItem
-                                      FROM OpportunityLineItem
-                                     WHERE opportunityId IN :i.keySet()
-                                      WITH SYSTEM_MODE
-                                  GROUP BY OpportunityId
-        ]) {
-            i.put((Id)agr.get('OpportunityId'), ((Decimal)agr.get('maxLineItem')).intValue());
-        }
-
-        for (OpportunityLineItem li : newItems) {
-            li.LineItem__c = (i.get(li.OpportunityId) + 1);
-            i.put(li.OpportunityId, (Integer)li.LineItem__c);
-        }
-    }
-
-
     private void resequenceLineItems(List<OpportunityLineItem> oldItems, List<OpportunityLineItem> newItems, Map<Id,OpportunityLineItem> oldMap, Map<Id,OpportunityLineItem> newMap) {
         List<OpportunityLineItem> lineItems = new List<OpportunityLineItem>();
 
@@ -88,18 +62,26 @@ public with sharing class OpportunityLineItemTriggerHandler {
                                       WITH SYSTEM_MODE
                                   GROUP BY OpportunityId
         ]) {
-            i.put((Id)agr.get('OpportunityId'), ((Decimal)agr.get('maxLineItem')).intValue());
+            i.put((Id)agr.get('OpportunityId'), nvl(((Decimal)agr.get('maxLineItem')), 0.00).intValue());
         }
 
-        for (OpportunityLineItem li : [SELECT Id, OpportunityId, LineItem__c
-                                         FROM OpportunityLineItem
-                                        WHERE OpportunityId IN :i.keySet()
-                                         WITH SYSTEM_MODE
-                                     ORDER BY Id ASC
-        ]) {
-            li.LineItem__c = i.get(li.OpportunityId) + 1;
-            i.put(li.OpportunityId, (Integer)li.LineItem__c);
-            lineItems.add(li);
+        if (this.operationType == Triggeroperation.BEFORE_INSERT) {
+            for (OpportunityLineItem li : newItems) {
+                li.LineItem__c = (i.get(li.OpportunityId) + 1);
+                i.put(li.OpportunityId, (Integer)li.LineItem__c);
+            }
+        }
+        else if (this.operationType == Triggeroperation.AFTER_DELETE) {
+            for (OpportunityLineItem li : [SELECT Id, OpportunityId, LineItem__c
+                                             FROM OpportunityLineItem
+                                            WHERE OpportunityId IN :i.keySet()
+                                             WITH SYSTEM_MODE
+                                         ORDER BY Id ASC
+            ]) {
+                li.LineItem__c = i.get(li.OpportunityId) + 1;
+                i.put(li.OpportunityId, (Integer)li.LineItem__c);
+                lineItems.add(li);
+            }
         }
 
         if (!lineItems.isEmpty()) {

@@ -53,7 +53,7 @@ private class OpportunityLineItemTriggerTest {
                 OpportunityId    = o.Id,
                 PricebookEntryId = pbes[i].Id,
                 UnitPrice        = pbes[i].UnitPrice,
-                Quantity         = 10.00
+                Quantity         = (100 * (i + 1))
             );
             lineItems.add(li);
         }
@@ -62,12 +62,13 @@ private class OpportunityLineItemTriggerTest {
             OpportunityId    = o.Id,
             PricebookEntryId = pbes[lineItems.size()].Id,
             UnitPrice        = pbes[lineItems.size()].UnitPrice,
-            Quantity         = 1.00
+            Quantity         = (100 * (lineItems.size() + 1))
         );
         insert li;
         Test.stopTest();
         System.assertEquals(10, [SELECT COUNT() FROM OpportunityLineItem]);
         System.assertEquals(10, [SELECT Id, OpportunityLineItems__c FROM Account WHERE Id = :a.Id].OpportunityLineItems__c);
+        System.debug(LoggingLevel.INFO, System.JSON.serializePretty([SELECT Id, LineItem__c FROM OpportunityLineItem ORDER BY LineItem__c ASC]));
         System.assertEquals(10, [SELECT Id, LineItem__c FROM OpportunityLineItem ORDER BY LineItem__c DESC LIMIT 1].LineItem__c);
     }
 
