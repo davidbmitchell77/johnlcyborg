@@ -68,7 +68,6 @@ private class OpportunityLineItemTriggerTest {
         Test.stopTest();
         System.assertEquals(10, [SELECT COUNT() FROM OpportunityLineItem]);
         System.assertEquals(10, [SELECT Id, OpportunityLineItems__c FROM Account WHERE Id = :a.Id].OpportunityLineItems__c);
-        System.debug(LoggingLevel.INFO, System.JSON.serializePretty([SELECT Id, LineItem__c FROM OpportunityLineItem ORDER BY LineItem__c ASC]));
         System.assertEquals(10, [SELECT Id, LineItem__c FROM OpportunityLineItem ORDER BY LineItem__c DESC LIMIT 1].LineItem__c);
     }
 
