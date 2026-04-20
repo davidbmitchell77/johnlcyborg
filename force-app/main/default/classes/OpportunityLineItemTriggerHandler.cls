@@ -78,6 +78,7 @@ public with sharing class OpportunityLineItemTriggerHandler {
     private void updateParentAccounts(List<OpportunityLineItem> oldItems, List<OpportunityLineItem> newItems, Map<Id,OpportunityLineItem> oldMap, Map<Id,OpportunityLineItem> newMap) {
         Map<Id,Account> accounts = new Map<Id,Account>();
         for (Id accountId : accountIds(opportunities(opportunityIds(nvl(newItems, oldItems))))) {
+      //for (Id accountId : accountIds(nvl(newMap, oldMap))) {
             accounts.put(accountId, new Account(Id=accountId, OpportunityLineItems__c=0));
         }
 
@@ -90,6 +91,7 @@ public with sharing class OpportunityLineItemTriggerHandler {
             Account a = new Account(Id=(Id)agr.get('AccountId'), OpportunityLineItems__c=(Integer)agr.get('lineItems'));
             accounts.put(a.Id, a);
         }
+        System.debug(LoggingLevel.INFO, (this.apexClassName + ':\n') + System.JSON.serializePretty(accounts));
 
         if (!accounts.values().isEmpty()) {
             for (Database.SaveResult sr : Database.update(accounts.values(), false, AccessLevel.SYSTEM_MODE)) {
@@ -106,6 +108,24 @@ public with sharing class OpportunityLineItemTriggerHandler {
                     if (!results.contains(o.AccountId)) {
                         results.add(o.AccountId);
                     }
+                }
+            }
+        }
+        return results;
+    }
+
+    private Set<Id> accountIds(Map<Id,OpportunityLineItem> lineItems) {
+        Set<Id> results = new Set<Id>();
+        if (lineItems != null) {
+            for (OpportunityLineItem li : [SELECT Id, Opportunity.AccountId
+                                             FROM OpportunityLineItem
+                                            WHERE Id IN :lineItems.keySet()
+                                              AND OpportunityId != null
+                                              AND Opportunity.AccountId != null
+                                             WITH SYSTEM_MODE
+            ]) {
+                if (!results.contains(li.Opportunity.AccountId)) {
+                    results.add(li.Opportunity.AccountId);
                 }
             }
         }
@@ -160,5 +180,9 @@ public with sharing class OpportunityLineItemTriggerHandler {
 
     private List<OpportunityLineItem> nvl(List<OpportunityLineItem> list1, List<OpportunityLineItem> list2) {
         return ((list1 != null) ? list1 : list2);
+    }
+
+    private Map<Id,OpportunityLineItem> nvl(Map<Id,OpportunityLineItem> map1, Map<Id,OpportunityLineItem> map2) {
+        return ((map1 != null) ? map1 : map2);
     }
 }
