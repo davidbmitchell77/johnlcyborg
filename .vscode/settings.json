@@ -42,5 +42,8 @@
   "eslint.options": {
     "overrideConfigFile": "/home/davidbmitchell77/.repos/johnlcyborg/.eslintrc.json"
   },
-  "salesforcedx-vscode-core.show-cli-success-msg": false
+  "salesforcedx-vscode-core.show-cli-success-msg": false,
+  "salesforcedx-vscode-apex.java.home": "/usr/lib/jvm/java-17-openjdk-amd64",
+  "files.trimTrailingWhitespace": true,
+  "salesforcedx-vscode-apex-testing.retrieve-test-code-coverage": true
 }
