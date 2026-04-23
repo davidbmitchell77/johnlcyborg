@@ -11,13 +11,14 @@ private class AccountsControllerTest {
         for (Integer i=0; i<10; i++) {
             Contact c = new Contact(
                 FirstName = UUID.randomUUID().toString(),
-                LastName  = String.valueOf(i),
+                LastName  = ('000' + String.valueOf(i + 1)).right(4),
                 Phone     = '(000) 000-0000',
                 AccountId = a.Id
             );
             contacts.add(c);
         }
         insert contacts;
+        System.debug(LoggingLevel.INFO, System.JSON.serializePretty(contacts));
     }
 
     @isTest
