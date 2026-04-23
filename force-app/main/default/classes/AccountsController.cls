@@ -23,13 +23,16 @@ public with sharing class AccountsController {
                        OtherState,
                        OtherPostalCode,
                        OtherCountry,
+                       ReportsToId,
                        ReportsTo.Salutation,
                        ReportsTo.Name,
                        ReportsTo.Title,
-                       reportsTo.Email,
+                       ReportsTo.Email,
                        ReportsTo.Phone,
                        ReportsTo.MobilePhone,
-                       ReportsTo.HomePhone
+                       ReportsTo.HomePhone,
+                       AccountId,
+                       Account.Name
                   FROM Contact
                  WHERE AccountId = :accountId
                   WITH USER_MODE
