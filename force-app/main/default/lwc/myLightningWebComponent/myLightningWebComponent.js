@@ -13,12 +13,12 @@ import CITY        from '@salesforce/schema/Account.BillingCity';
 import STATE       from '@salesforce/schema/Account.BillingState';
 import ZIP         from '@salesforce/schema/Account.BillingPostalCode';
 import COUNTRY     from '@salesforce/schema/Account.BillingCountry';
-import DBNUMBER    from '@salesforce/schema/Account.DunsNumber';
 import DBNAME      from '@salesforce/schema/Account.DandbCompany.Name';
+import DBNUMBER    from '@salesforce/schema/Account.DunsNumber';
 
 const FIELDS = [
     [ NAME, PHONE, EMAIL, WEBSITE, STREET, CITY, STATE, ZIP, COUNTRY ],
-    [ DBNUMBER, DBNAME ]
+    [ DBNAME, DBNUMBER ]
 ];
 
 export default class MyLightingWebComponent extends LightningElement {
