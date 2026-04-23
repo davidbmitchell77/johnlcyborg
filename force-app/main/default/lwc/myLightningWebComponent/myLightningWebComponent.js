@@ -1,6 +1,7 @@
 import { LightningElement, api, track, wire } from 'lwc';
 import { getRecord                          } from 'lightning/uiRecordApi';
 import { ShowToastEvent                     } from 'lightning/platformShowToastEvent';
+import { refreshApex                        } from '@salesforce/apex';
 
 import getContacts from '@salesforce/apex/AccountsController.getContacts';
 import LABEL       from '@salesforce/label/c.ErrorLabel';
@@ -52,6 +53,7 @@ export default class MyLightingWebComponent extends LightningElement {
 
     async relatedContacts_async(accountId) {
         try {
+            this.refreshApex(this.account);
             const results = await getContacts({ 'accountId': accountId });
             this.contacts = { ...results };
             this.error    = undefined;
@@ -66,6 +68,7 @@ export default class MyLightingWebComponent extends LightningElement {
     }
 
     relatedContacts_promise(accountId) {
+        this.refreshApex(this.account);
         getContacts({ 'accountId': accountId })
        .then(
             (results) => {
