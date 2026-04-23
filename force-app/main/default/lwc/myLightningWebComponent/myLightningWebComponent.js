@@ -37,6 +37,7 @@ export default class MyLightingWebComponent extends LightningElement {
             console.info(data);
         }
     }
+
     handleClick(event) {
         switch (event.target.label) {
             case 'Related Contacts':
