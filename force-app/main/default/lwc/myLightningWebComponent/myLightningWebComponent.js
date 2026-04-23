@@ -8,14 +8,18 @@ import LABEL       from '@salesforce/label/c.ErrorLabel';
 import NAME        from '@salesforce/schema/Account.Name';
 import PHONE       from '@salesforce/schema/Account.Phone';
 import WEBSITE     from '@salesforce/schema/Account.Website';
+import STREET      from '@salesforce/schema/Account.BillingStreet';
 import CITY        from '@salesforce/schema/Account.BillingCity';
 import STATE       from '@salesforce/schema/Account.BillingState';
+import ZIP         from '@salesforce/schema/Account.BillingPostalCode';
 import COUNTRY     from '@salesforce/schema/Account.BillingCountry';
 import DBNUMBER    from '@salesforce/schema/Account.DunsNumber';
 import DBNAME      from '@salesforce/schema/Account.DandbCompany.Name';
 
-const FIELDS          = [ NAME, PHONE, EMAIL, WEBSITE, CITY, STATE, COUNTRY ];
-const OPTIONAL_FIELDS = [ DBNUMBER, DBNAME ];
+const FIELDS = [
+    [ NAME, PHONE, EMAIL, WEBSITE, STREET, CITY, STATE, ZIP, COUNTRY ],
+    [ DBNUMBER, DBNAME ]
+];
 
 export default class MyLightingWebComponent extends LightningElement {
     @api objectApiName;
@@ -24,7 +28,7 @@ export default class MyLightingWebComponent extends LightningElement {
     account;
     error;
 
-    @wire(getRecord, { 'recordId': "$recordId", 'fields': FIELDS, 'optionalFields': OPTIONAL_FIELDS })
+    @wire(getRecord, { recordId: "$recordId", fields: FIELDS[0], optionalFields: FIELDS[1] })
     handleResponse({ error, data }) {
         if (error) {
             this.error   = error.body.message;
@@ -69,7 +73,7 @@ export default class MyLightingWebComponent extends LightningElement {
 
     relatedContacts_promise(accountId) {
         this.refreshApex(this.account);
-        getContacts({ 'accountId': accountId })
+        getContacts({ accountId: accountId })
        .then(
             (results) => {
                 this.contacts = { ...results };
@@ -81,7 +85,7 @@ export default class MyLightingWebComponent extends LightningElement {
             (e) => {
                 this.error = { ...e };
                 this.contacts = undefined;
-                this.showToast(LABEL, this.error, 'error', 'sticky');
+                this.showToast(LABEL, this.error, 'error', 'pester');
                 console.info(e);
             }
         )
@@ -89,10 +93,10 @@ export default class MyLightingWebComponent extends LightningElement {
 
     showToast(title, message, variant, mode) {
         this.dispatchEvent(new ShowToastEvent({
-              'title': title,
-            'message': message,
-            'variant': (variant || 'info'       ),
-               'mode': (mode    || 'dismissable')
+              title: title,
+            message: message,
+            variant: (variant || 'info'       ),
+               mode: (mode    || 'dismissable')
         }));
     }
 
