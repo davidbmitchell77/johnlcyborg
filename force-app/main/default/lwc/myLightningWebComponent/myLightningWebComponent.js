@@ -96,7 +96,7 @@ export default class MyLightingWebComponent extends LightningElement {
               title: title,
             message: message,
             variant: (variant || 'info'       ),
-               mode: (mode    || 'dismissable')
+               mode: (mode    || 'dismissible')
         }));
     }
 
