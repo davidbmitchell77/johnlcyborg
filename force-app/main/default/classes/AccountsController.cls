@@ -1,4 +1,6 @@
 public with sharing class AccountsController {
+    private static final Integer querySizeLimit = 200;
+
     @AuraEnabled(cacheable=true)
     public static List<Contact> getContacts(Id accountId) {
         return [SELECT Id,
@@ -26,7 +28,7 @@ public with sharing class AccountsController {
                  WHERE AccountId = :accountId
                   WITH USER_MODE
               ORDER BY LastName ASC, FirstName ASC
-                 LIMIT 200
+                 LIMIT :querySizeLimit
         ];
     }
 }
