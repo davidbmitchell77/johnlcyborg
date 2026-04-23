@@ -16,7 +16,7 @@ import DBNAME      from '@salesforce/schema/Account.DandbCompany.Name';
 const FIELDS          = [ NAME, PHONE, EMAIL, WEBSITE, CITY, STATE, COUNTRY ];
 const OPTIONAL_FIELDS = [ DBNUMBER, DBNAME ];
 
-export default class myLightingWebComponent extends LightningElement {
+export default class MyLightingWebComponent extends LightningElement {
     @api objectApiName;
     @api recordId;
 
@@ -51,7 +51,7 @@ export default class myLightingWebComponent extends LightningElement {
 
     async relatedContacts_async(accountId) {
         try {
-            const results = await getContacts({ 'accountId': this.recordId });
+            const results = await getContacts({ 'accountId': accountId });
             this.contacts = { ...results };
             this.error    = undefined;
             console.info(results);
@@ -65,7 +65,7 @@ export default class myLightingWebComponent extends LightningElement {
     }
 
     relatedContacts_promise(accountId) {
-        getContacts({ 'accountId': this.recordId })
+        getContacts({ 'accountId': accountId })
        .then(
             (results) => {
                 this.contacts = { ...results };
