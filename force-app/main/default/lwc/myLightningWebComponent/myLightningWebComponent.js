@@ -70,8 +70,8 @@ export default class MyLightingWebComponent extends LightningElement {
                 this.doCallouts_await();
                 break;
             case 'Clear':
-                this.account   = undefined;
-                this.contacts  = undefined;
+                this.account    = undefined;
+                this.contacts   = undefined;
                 this.response01 = undefined;
                 this.response02 = undefined;
                 this.response03 = undefined;
