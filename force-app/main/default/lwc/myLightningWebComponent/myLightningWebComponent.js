@@ -84,11 +84,11 @@ export default class MyLightingWebComponent extends LightningElement {
             console.info('relatedContacts_async:');
             console.info(results);
         }
-        catch(e) {
-            this.error = e.body.message;
+        catch(error) {
+            this.error = error.body.message;
             this.contacts = undefined;
-            this.showToast(LABEL, this.error, 'error', 'sticky');
-            console.error(e);
+            this.showToast(LABEL, error.body.message, 'error', 'sticky');
+            console.error(error);
         }
     }
 
@@ -105,10 +105,10 @@ export default class MyLightingWebComponent extends LightningElement {
             }
         )
        .catch(
-            (e) => {
-                this.error = { ...e };
+            (error) => {
+                this.error = error;
                 this.contacts = undefined;
-                this.showToast(LABEL, this.error, 'error', 'sticky');
+                this.showToast(LABEL, error.body.message, 'error', 'sticky');
                 console.info(e);
             }
         )
