@@ -6,6 +6,10 @@
                 <lightning-button label="Run HTTP Requests" onclick={handleClick}></lightning-button>&nbsp;
                 <lightning-button label="Click Me!"         onclick={handleClick}></lightning-button>
             </div>
+            <div class="slds-var-m-around_small">
+                <template lwc:if={account}>{account.fields.Name.value}</template></br>
+                <template lwc:if={contacts}>{contacts}</template>
+            </div>
         </lightning-card>
     </div>
 </template>

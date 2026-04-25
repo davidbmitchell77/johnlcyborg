@@ -29,6 +29,7 @@ export default class MyLightingWebComponent extends LightningElement {
     @api recordId;
 
     account;
+    contacts;
     response01;
     response02;
     response03;
@@ -46,12 +47,14 @@ export default class MyLightingWebComponent extends LightningElement {
         if (error) {
             this.error   = error.body.message;
             this.account = undefined;
+            this.showAccount = false;
             this.showToast(LABEL, error.body.message, 'error', 'sticky');
             console.error(error);
         }
         else if (data) {
-            this.account = data;
-            this.error   = undefined;
+            this.account     = data;
+            this.error       = undefined;
+            this.showAccount = true;
             console.info(data);
         }
     }
@@ -62,23 +65,24 @@ export default class MyLightingWebComponent extends LightningElement {
             case 'Related Contacts':
                 this.relatedContacts_async(this.recordId);
                 this.relatedContacts_promise(this.recordId);
-                this.showToast('Button clicked!', `You clicked the ${event.target.label} button.`);
                 break;
             case 'Run HTTP Requests':
                 this.doCallouts_await();
-                this.showToast('Button clicked!', `You clicked the ${event.target.label} button.`);
                 break;
-            default:
-                this.showToast('Button clicked!', `You clicked the ${event.target.label} button.`);
-                console.info(`You clicked the ${event.target.label} button.`);
+            case 'Click Me!':
+                this.account  = undefined;
+                this.contacts = undefined;
+                break;
         }
+        console.info(`You clicked the ${event.target.label} button.`);
+        this.showToast('Button clicked!', `You clicked the ${event.target.label} button.`);
     }
 
     async relatedContacts_async(accountId) {
         try {
             await refreshApex(this.account);
             const results = await getContacts({ 'accountId': accountId });
-            this.contacts = { ...results };
+            this.contacts = JSON.stringify(results, null, 2);
             this.error    = undefined;
             this.showToast('relatedContacts_async:', 'It worked!');
             console.info('relatedContacts_async:');
@@ -97,7 +101,7 @@ export default class MyLightingWebComponent extends LightningElement {
         getContacts({ accountId: accountId })
        .then(
             (results) => {
-                this.contacts = { ...results };
+                this.contacts = JSON.stringify(results, null, 2);
                 this.error = undefined;
                 console.info('relatedContacts_promise:');
                 console.info(results);
