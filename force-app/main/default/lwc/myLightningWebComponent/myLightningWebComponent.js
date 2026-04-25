@@ -149,7 +149,7 @@ export default class MyLightingWebComponent extends LightningElement {
         this.dispatchEvent(new ShowToastEvent({
               title: title,
             message: message,
-            variant: (variant || 'info'       ),
+            variant: (variant || 'info'  ),
                mode: (mode    || 'pester')
         }));
     }
