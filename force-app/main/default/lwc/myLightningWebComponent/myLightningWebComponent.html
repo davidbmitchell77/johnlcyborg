@@ -2,13 +2,16 @@
     <div class="slds-var-m-around_medium">
         <lightning-card title="asynchronous" icon-name="standard:account">
             <div class="slds-var-m-around_small">
-                <lightning-button label="Related Contacts"  onclick={handleClick}></lightning-button>&nbsp;
-                <lightning-button label="Run HTTP Requests" onclick={handleClick}></lightning-button>&nbsp;
-                <lightning-button label="Click Me!"         onclick={handleClick}></lightning-button>
+                <lightning-button label="Related Contacts"  variant="brand" onclick={handleClick}></lightning-button>&nbsp;
+                <lightning-button label="Run HTTP Requests" variant="brand" onclick={handleClick}></lightning-button>&nbsp;
+                <lightning-button label="Clear"             variant="brand" onclick={handleClick}></lightning-button>
             </div>
             <div class="slds-var-m-around_small">
-                <template lwc:if={account}>{account.fields.Name.value}</template></br>
-                <template lwc:if={contacts}>{contacts}</template>
+                <template lwc:if={account}>{account.fields.Name.value}</template>
+                <template lwc:if={contacts}>{contacts}</template></br>
+                <template lwc:if={response01}>{response01}</template></br>
+                <template lwc:if={response02}>{response02}</template></br>
+                <template lwc:if={response03}>{response03}</template></br>
             </div>
         </lightning-card>
     </div>

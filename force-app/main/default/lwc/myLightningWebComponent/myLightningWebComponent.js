@@ -69,9 +69,12 @@ export default class MyLightingWebComponent extends LightningElement {
             case 'Run HTTP Requests':
                 this.doCallouts_await();
                 break;
-            case 'Click Me!':
-                this.account  = undefined;
-                this.contacts = undefined;
+            case 'Clear':
+                this.account   = undefined;
+                this.contacts  = undefined;
+                this.response01 = undefined;
+                this.response02 = undefined;
+                this.response03 = undefined;
                 break;
         }
         console.info(`You clicked the ${event.target.label} button.`);
