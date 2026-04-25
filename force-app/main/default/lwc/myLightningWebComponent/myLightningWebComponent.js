@@ -46,7 +46,7 @@ export default class MyLightingWebComponent extends LightningElement {
         if (error) {
             this.error   = error.body.message;
             this.account = undefined;
-            this.showToast(LABEL, error.body.message, 'error');
+            this.showToast(LABEL, error.body.message, 'error', 'sticky');
             console.error(error);
         }
         else if (data) {
@@ -62,6 +62,7 @@ export default class MyLightingWebComponent extends LightningElement {
             case 'Related Contacts':
                 this.relatedContacts_async(this.recordId);
                 this.relatedContacts_promise(this.recordId);
+                this.showToast('Button clicked!', `You clicked the ${event.target.label} button.`);
                 break;
             case 'Run HTTP Requests':
                 this.doCallouts_await();
@@ -107,7 +108,7 @@ export default class MyLightingWebComponent extends LightningElement {
             (e) => {
                 this.error = { ...e };
                 this.contacts = undefined;
-                this.showToast(LABEL, this.error, 'error', 'pester');
+                this.showToast(LABEL, this.error, 'error', 'sticky');
                 console.info(e);
             }
         )
@@ -133,7 +134,7 @@ export default class MyLightingWebComponent extends LightningElement {
             this.response01 = undefined;
             this.response02 = undefined;
             this.response03 = undefined;
-            this.showToast('Error during http request!', error.body.message, 'error', 'pester');
+            this.showToast('Error during http request!', error.body.message, 'error', 'sticky');
         }
     }
 
