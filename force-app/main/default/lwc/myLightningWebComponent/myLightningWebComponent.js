@@ -30,6 +30,7 @@ export default class MyLightingWebComponent extends LightningElement {
 
     account;
     contacts;
+    response;
     response01;
     response02;
     response03;
@@ -43,7 +44,8 @@ export default class MyLightingWebComponent extends LightningElement {
     }
 
     @wire(getRecord, { recordId: "$recordId", fields: FIELDS[0], optionalFields: FIELDS[1] })
-    handleResponse({ error, data }) {
+    handle(response) {
+        const { data, error } = response;
         if (error) {
             this.error   = error.body.message;
             this.account = undefined;
@@ -51,8 +53,9 @@ export default class MyLightingWebComponent extends LightningElement {
             console.error(error);
         }
         else if (data) {
-            this.account     = data;
-            this.error       = undefined;
+            this.account  = data;
+            this.error    = undefined;
+            this.response = response;
             console.info(data);
         }
     }
@@ -61,7 +64,7 @@ export default class MyLightingWebComponent extends LightningElement {
         console.clear();
         switch (event.target.label) {
             case 'Related Contacts':
-                this.relatedContacts_async(this.recordId);
+                this.relatedContacts_await(this.recordId);
                 this.relatedContacts_promise(this.recordId);
                 break;
             case 'Run HTTP Requests':
@@ -79,9 +82,9 @@ export default class MyLightingWebComponent extends LightningElement {
         this.showToast('Button clicked!', `You clicked the ${event.target.label} button.`);
     }
 
-    async relatedContacts_async(accountId) {
+    async relatedContacts_await(accountId) {
         try {
-            await refreshApex(this.account);
+            await refreshApex(this.response);
             const results = await getContacts({ accountId: accountId });
             this.contacts = JSON.stringify(results, null, 2);
             this.error    = undefined;
@@ -97,43 +100,29 @@ export default class MyLightingWebComponent extends LightningElement {
         }
     }
 
-    relatedContacts_promise(accountId) {
-        refreshApex(this.account);
-        getContacts({ accountId: accountId })
-       .then(
-            (results) => {
-                this.contacts = JSON.stringify(results, null, 2);
-                this.error = undefined;
-                console.info('relatedContacts_promise:');
-                console.info(results);
-                this.showToast('relatedContacts_promise', 'It worked!');
-            }
-        )
-       .catch(
-            (error) => {
-                this.error = error;
-                this.contacts = undefined;
-                this.showToast(LABEL, error.body.message, 'error', 'sticky');
-                console.info(e);
-            }
-        )
-    }
-
-   relatedContacts_promise2(accountId) {
-       refreshApex(this.account)
+   relatedContacts_promise(accountId) {
+       refreshApex(this.response)
       .then(
            () => {
-               const data =  getContacts({ accountId: accountId })
+               const data = getContacts({ accountId: accountId })
                return data;
            }
        )
       .then(
            (data) => {
-                this.contacts = JSON.stringify(data, null, 2);
-                this.error = undefined;
-                console.info('relatedContacts_promise2:');
-                console.info(data);
-                this.showToast('relatedContacts_promise2', 'It worked!');
+               this.contacts = JSON.stringify(data, null, 2);
+               this.error = undefined;
+               console.info('relatedContacts_promise:');
+               console.info(data);
+               this.showToast('relatedContacts_promise:', 'It worked!');
+           }
+       )
+      .catch(
+           (error) => {
+               this.error = error;
+               this.contacts = undefined;
+               this.showToast(LABEL, error.body.message, 'error', 'sticky');
+               console.info(error);
            }
        )
    }
