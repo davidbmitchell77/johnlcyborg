@@ -143,7 +143,7 @@ export default class MyLightingWebComponent extends LightningElement {
         }
         catch(error) {
             console.error(error);
-            this.error = error.body.message;
+            this.error      = error.body.message;
             this.response01 = undefined;
             this.response02 = undefined;
             this.response03 = undefined;
