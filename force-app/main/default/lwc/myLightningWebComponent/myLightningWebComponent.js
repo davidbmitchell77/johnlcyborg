@@ -69,6 +69,7 @@ export default class MyLightingWebComponent extends LightningElement {
                 break;
             case 'Run HTTP Requests':
                 this.doCallouts_await();
+                this.doCallouts_promise();
                 break;
             case 'Clear':
                 this.account    = undefined;
@@ -88,8 +89,8 @@ export default class MyLightingWebComponent extends LightningElement {
             const results = await getContacts({ accountId: accountId });
             this.contacts = JSON.stringify(results, null, 2);
             this.error    = undefined;
-            this.showToast('relatedContacts_async:', 'It worked!');
-            console.info('relatedContacts_async:');
+            this.showToast('relatedContacts_await:', 'It worked!');
+            console.info('relatedContacts_await:');
             console.info(results);
         }
         catch(error) {
@@ -137,9 +138,12 @@ export default class MyLightingWebComponent extends LightningElement {
             this.response01 = response01;
             this.response02 = response02;
             this.response03 = response03;
+            this.error      = undefined;
+            console.info('doCallouts_await:');
             console.info(response01);
             console.info(response02);
             console.info(response03);
+            this.showToast('doCallouts_await:', 'It worked!');
         }
         catch(error) {
             console.error(error);
@@ -149,6 +153,35 @@ export default class MyLightingWebComponent extends LightningElement {
             this.response03 = undefined;
             this.showToast('Error during http request!', error.body.message, 'error', 'sticky');
         }
+    }
+
+    doCallouts_promise() {
+        Promise.all([ callout01(), callout02(), callout03() ])
+       .then(
+            (responses) => {
+                console.info('doCallouts_promise:');
+                responses.map(
+                    (response, i) => {
+                        console.info(response);
+                        if (i == 0) { this.response01 = response; } else
+                        if (i == 1) { this.response02 = response; } else
+                        if (i == 2) { this.response03 = response; }
+                    }
+                );
+                this.error = undefined;
+                this.showToast('doCallouts_promise:', 'It worked!');
+            }
+        )
+       .catch(
+            (error) => {
+                console.error(error);
+                this.error      = error.body.message;
+                this.response01 = undefined;
+                this.response02 = undefined;
+                this.response03 = undefined;
+                this.showToast('Error during http request!', error.body.message, 'error', 'sticky');
+            }
+        );
     }
 
     showToast(title, message, variant, mode) {
