@@ -93,7 +93,7 @@ export default class MyLightingWebComponent extends LightningElement {
             console.info(results);
         }
         catch(error) {
-            this.error = error.body.message;
+            this.error    = error.body.message;
             this.contacts = undefined;
             this.showToast(LABEL, error.body.message, 'error', 'sticky');
             console.error(error);
