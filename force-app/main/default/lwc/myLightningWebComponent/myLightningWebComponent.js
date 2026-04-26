@@ -47,14 +47,12 @@ export default class MyLightingWebComponent extends LightningElement {
         if (error) {
             this.error   = error.body.message;
             this.account = undefined;
-            this.showAccount = false;
             this.showToast(LABEL, error.body.message, 'error', 'sticky');
             console.error(error);
         }
         else if (data) {
             this.account     = data;
             this.error       = undefined;
-            this.showAccount = true;
             console.info(data);
         }
     }
@@ -84,7 +82,7 @@ export default class MyLightingWebComponent extends LightningElement {
     async relatedContacts_async(accountId) {
         try {
             await refreshApex(this.account);
-            const results = await getContacts({ 'accountId': accountId });
+            const results = await getContacts({ accountId: accountId });
             this.contacts = JSON.stringify(results, null, 2);
             this.error    = undefined;
             this.showToast('relatedContacts_async:', 'It worked!');
