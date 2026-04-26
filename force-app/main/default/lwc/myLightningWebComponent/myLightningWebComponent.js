@@ -111,7 +111,7 @@ export default class MyLightingWebComponent extends LightningElement {
       .then(
            (data) => {
                this.contacts = JSON.stringify(data, null, 2);
-               this.error = undefined;
+               this.error    = undefined;
                console.info('relatedContacts_promise:');
                console.info(data);
                this.showToast('relatedContacts_promise:', 'It worked!');
@@ -119,7 +119,7 @@ export default class MyLightingWebComponent extends LightningElement {
        )
       .catch(
            (error) => {
-               this.error = error;
+               this.error    = error;
                this.contacts = undefined;
                this.showToast(LABEL, error.body.message, 'error', 'sticky');
                console.info(error);
