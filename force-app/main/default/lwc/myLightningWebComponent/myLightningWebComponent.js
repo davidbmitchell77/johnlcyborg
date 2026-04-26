@@ -119,6 +119,25 @@ export default class MyLightingWebComponent extends LightningElement {
         )
     }
 
+   relatedContacts_promise2(accountId) {
+       refreshApex(this.account)
+      .then(
+           () => {
+               const data =  getContacts({ accountId: accountId })
+               return data;
+           }
+       )
+      .then(
+           (data) => {
+                this.contacts = JSON.stringify(data, null, 2);
+                this.error = undefined;
+                console.info('relatedContacts_promise2:');
+                console.info(data);
+                this.showToast('relatedContacts_promise2', 'It worked!');
+           }
+       )
+   }
+
     async doCallouts_await() {
         try {
             const [ response01, response02, response03 ] = await Promise.all([
