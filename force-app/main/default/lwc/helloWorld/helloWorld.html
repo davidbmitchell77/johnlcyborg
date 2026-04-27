@@ -6,13 +6,13 @@
             <div>{fullName} is a {title}.</div>
         </div>
     </lightning-card>
-   <lightning-card title="@track properties">
+   <lightning-card title="track properties" icon-name="utility:slack_mentions">
         <div class="slds-var-m-around_large">
             <lightning-input type="text" label="Enter your City:" onkeyup={trackHandler}></lightning-input>
             <div>{address.city} is the city where I live.</div>
         </div>
     </lightning-card>
-   <lightning-card title="Calculator" icon-name="standard:budget" onkeyup={calculatorHandler}>
+   <lightning-card title="calculator" icon-name="standard:budget" onkeyup={calculatorHandler}>
         <div class="slds-var-m-around_large">
             <lightning-input type="number" label="Enter a number:"></lightning-input>
             <div>{total}</div>
