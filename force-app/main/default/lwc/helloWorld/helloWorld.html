@@ -1,5 +1,5 @@
 <template>
-   <lightning-card title="2-Way Data Binding">
+   <lightning-card title="2-Way Data Binding" icon-name="utility:expand_alt">
         <div class="slds-var-m-around_large">
             <lightning-input type="text" label="Type something:" onkeyup={changeHandler}></lightning-input>
             <div>Hello, World!</div>
@@ -12,7 +12,7 @@
             <div>{address.city} is the city where I live.</div>
         </div>
     </lightning-card>
-   <lightning-card title="Calculator" onkeyup={calculatorHandler}>
+   <lightning-card title="Calculator" icon-name="standard:budget" onkeyup={calculatorHandler}>
         <div class="slds-var-m-around_large">
             <lightning-input type="number" label="Enter a number:"></lightning-input>
             <div>{total}</div>
