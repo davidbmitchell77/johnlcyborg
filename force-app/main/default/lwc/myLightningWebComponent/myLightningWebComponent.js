@@ -94,7 +94,7 @@ export default class MyLightingWebComponent extends LightningElement {
                 break;
         }
         console.info(`You clicked the ${event.target.label} button.`);
-        this.showToast('Button clicked!', `You clicked the ${event.target.label} button.`, 'warning');
+        this.showToast(`You clicked the ${event.target.label} button.`, '', 'warning');
     }
 
     async refreshData() {
