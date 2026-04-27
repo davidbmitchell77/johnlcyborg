@@ -28,12 +28,22 @@ export default class MyLightingWebComponent extends LightningElement {
     @api objectApiName;
     @api recordId;
 
+    @api
+    get parentProperty() {
+        return this.childProperty;
+    }
+
+    set parentProperty(value) {
+        this.childProperty = ((value > '') ? value.toUpperCase() : undefined);
+    }
+
     account;
     contacts;
-    response;
+    wiredData;
     response01;
     response02;
     response03;
+    childProperty;
     error;
 
     constructor() {
@@ -47,15 +57,16 @@ export default class MyLightingWebComponent extends LightningElement {
     handle(response) {
         const { data, error } = response;
         if (error) {
-            this.error   = error.body.message;
-            this.account = undefined;
+            this.error     = error.body.message;
+            this.wriedData = undefined;
+            this.account   = undefined;
             this.showToast(LABEL, error.body.message, 'error', 'sticky');
             console.error(error);
         }
         else if (data) {
-            this.account  = data;
-            this.error    = undefined;
-            this.response = response;
+            this.account   = data;
+            this.error     = undefined;
+            this.wiredData = response;
             console.info(data);
         }
     }
@@ -63,6 +74,9 @@ export default class MyLightingWebComponent extends LightningElement {
     handleClick(event) {
         console.clear();
         switch (event.target.label) {
+            case 'Account':
+                this.refreshData();
+                break;
             case 'Related Contacts':
                 this.relatedContacts_await(this.recordId);
                 this.relatedContacts_promise(this.recordId);
@@ -83,9 +97,20 @@ export default class MyLightingWebComponent extends LightningElement {
         this.showToast('Button clicked!', `You clicked the ${event.target.label} button.`);
     }
 
+    async refreshData() {
+        try {
+            await refreshApex(this.wiredData);
+            this.recordId   = '';
+            this.recordId   = '001fj00000ea8jdAAA';
+        }
+        catch(error) {
+            console.error(error);
+        }
+    }
+
     async relatedContacts_await(accountId) {
         try {
-            await refreshApex(this.response);
+            await refreshApex(this.wiredData);
             const results = await getContacts({ accountId: accountId });
             this.contacts = JSON.stringify(results, null, 2);
             this.error    = undefined;
@@ -101,8 +126,8 @@ export default class MyLightingWebComponent extends LightningElement {
         }
     }
 
-   relatedContacts_promise(accountId) {
-       refreshApex(this.response)
+    relatedContacts_promise(accountId) {
+       refreshApex(this.wiredData)
       .then(
            () => {
                const data = getContacts({ accountId: accountId })
@@ -126,7 +151,7 @@ export default class MyLightingWebComponent extends LightningElement {
                console.info(error);
            }
        )
-   }
+    }
 
     async doCallouts_await() {
         try {
