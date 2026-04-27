@@ -2,23 +2,32 @@
     <div class="slds-var-m-around_medium">
         <lightning-card title="asynchronous" icon-name="standard:account">
             <div class="slds-var-m-around_small">
-                <lightning-button label="Account"           variant="brand"         onclick={handleClick}></lightning-button>&nbsp;
+                <lightning-button label={objectApiName}     variant="brand"         onclick={handleClick}></lightning-button>&nbsp;
                 <lightning-button label="Related Contacts"  variant="brand"         onclick={handleClick}></lightning-button>&nbsp;
                 <lightning-button label="Run HTTP Requests" variant="brand"         onclick={handleClick}></lightning-button>&nbsp;
                 <lightning-button label="Clear"             variant="brand-outline" onclick={handleClick}></lightning-button>
             </div>
             <div class="slds-var-m-around_small">
-                <template lwc:if={account}><p><strong>Account</strong></p></template>
-                <template lwc:if={account}>{account.fields.Name.value}</template><br/>
-                </br>
-                <template lwc:if={contacts}><p><strong>Related Contacts</strong></p></template>
-                <template lwc:if={contacts}>{contacts}</template></br>
-                </br>
-                <template lwc:if={response01}><p><strong>HTTP Responses</strong></p></template>
-                <template lwc:if={response01}><p>{response01}</p></template>
-                <template lwc:if={response02}><p>{response02}</p></template>
-                <template lwc:if={response03}><p>{response03}</p></template>
-                </br>
+                <template lwc:if={account}>
+                    <div class="slds-var-m-bottom_small">
+                        <p><strong>Account</strong></p>
+                        <p>{account.fields.Name.value}</p>
+                    </div>
+                </template>
+                <template lwc:if={contacts}>
+                    <div class="slds-var-m-bottom_small">
+                        <p><strong>Related Contacts</strong></p>
+                        <p>{contacts}</p>
+                    </div>
+                </template>
+                <template lwc:if={response01}>
+                    <div class="slds-var-m-bottom_small">
+                        <p><strong>HTTP Responses</strong></p>
+                        <p>{response01}</p>
+                        <p>{response02}</p>
+                        <p>{response03}</p>
+                    </div>
+                </template>
             </div>
         </lightning-card>
     </div>
