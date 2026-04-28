@@ -1,8 +1,10 @@
+:host {
+  --slds-c-card-color-background: var(--lwc-brandBackgroundPrimary);
+}
 .myButtonStyle{
     --slds-c-button-brand-color-border: orange;
     --slds-c-button-sizing-border: 5px;
 }
-
 .myButtonStyle:hover{
     --slds-c-button-brand-color-border-hover: pink;
     --slds-c-button-sizing-border: 1rem;
