@@ -47,7 +47,15 @@ private class AccountControllerTest {
     }
 
     @isTest
-    private static void test01_getContacts() {
+    private static void test01_getAccounts() {
+        Test.startTest();
+        List<Account> accounts = AccountsController.getAccounts();
+        Test.stopTest();
+        System.assertNotEquals(0, accounts.size());
+    }
+
+    @isTest
+    private static void test02_getContacts() {
         Account a = [SELECT Id, Name, Website FROM Account WHERE RecordType.DeveloperName  = 'Patient' LIMIT 1];
         Test.startTest();
         List<Contact> contacts = AccountsController.getContacts(a.Id);

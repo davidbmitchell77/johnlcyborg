@@ -40,4 +40,9 @@ public with sharing class AccountsController {
                  LIMIT :querySizeLimit
         ];
     }
+
+    @AuraEnabled(cacheable=true)
+    public static List<Account> getAccounts() {
+        return [SELECT Id, Name, Industry, AnnualRevenue FROM Account WITH USER_MODE LIMIT 50];
+    }
 }
