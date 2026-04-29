@@ -1,0 +1,16 @@
+<template>
+    <lightning-card title="Accounts Data Table" icon-name="standard:account">
+        <div class="slds-var-m-around_mediuim">
+            <lightning-datatable
+                key-field="Id"
+                data={accounts}
+                columns={columns}
+                onrowaction={handleRowAction}
+                sorted-by={sortedBy}
+                sorted-direction={sortedDirection}
+                onsort={handleSort}
+            >
+            </lightning-datatable>
+        </div>
+    </lightning-card>
+</template>
