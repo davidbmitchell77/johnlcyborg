@@ -41,7 +41,7 @@ export default class PicklistValues extends NavigationMixin(LightningElement) {
             console.error(error);
         }
         else if (data) {
-            this.picklistValues = JSON.stringify(data.values, null, 2);
+            this.picklistValues = data.values;
             console.info(data);
         }
     }
