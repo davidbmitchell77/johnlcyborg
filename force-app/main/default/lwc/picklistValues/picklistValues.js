@@ -14,8 +14,8 @@ export default class PicklistValues extends NavigationMixin(LightningElement) {
     pageRef = {
         type: 'standard__recordPage',
         attributes: {
-            objectApiName: 'Account',
-                 recordId: '001fj00000ea8jdAAA',
+            objectApiName: CASE_OBJECT,
+                 recordId: '500fj00001ABmSrAAL',
                actionName: 'view'
         }
     };
@@ -49,7 +49,7 @@ export default class PicklistValues extends NavigationMixin(LightningElement) {
     handleClick(event) {
         console.clear();
         switch (event.target.label) {
-            case 'Go To Account Record':
+            case 'Go To Case Record':
                 this.gotoPage(this.pageRef);
                 break;
             case 'Show Toast':
