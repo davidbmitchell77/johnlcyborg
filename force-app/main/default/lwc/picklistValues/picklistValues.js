@@ -46,6 +46,14 @@ export default class PicklistValues extends NavigationMixin(LightningElement) {
         }
     }
 
+    get objectApiName() {
+        return CASE_OBJECT.objectApiName;
+    }
+
+    get fieldApiName() {
+        return CASE_STATUS.fieldApiName;
+    }
+
     handleClick(event) {
         console.clear();
         switch (event.target.label) {

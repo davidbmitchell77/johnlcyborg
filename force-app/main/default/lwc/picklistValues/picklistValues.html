@@ -1,8 +1,9 @@
 <template>
     <lightning-card title="picklists" icon-name="utility:list">
         <div class="slds-var-m-around_medium">
+            <strong>{objectApiName}.{fieldApiName}</strong><br/><br/>
             {picklistValues}<br/><br/>
-            <lightning-button variant="brand" label="Go To Case Record" onclick={handleClick}></lightning-button>&nbsp;
+            <lightning-button variant="brand" label="Go To Case Record" onclick={handleClick}></lightning-button>&nbsp;&nbsp;
             <lightning-button variant="brand" label="Show Toast"        onclick={handleClick}></lightning-button>
         </div>
     </lightning-card>
