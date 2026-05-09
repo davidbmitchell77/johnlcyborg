@@ -25,6 +25,9 @@ export default class PicklistValues extends NavigationMixin(LightningElement) {
         attributes: {
             objectApiName: 'Account',
                actionName: 'list'
+        },
+        state: {
+            filterName: 'AllAccounts'
         }
     };
 
