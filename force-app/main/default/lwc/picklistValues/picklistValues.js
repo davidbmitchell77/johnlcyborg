@@ -8,6 +8,7 @@ import CASE_OBJECT from '@salesforce/schema/Case';
 import CASE_STATUS from '@salesforce/schema/Case.Status';
 
 export default class PicklistValues extends NavigationMixin(LightningElement) {
+    recordId;
     _wiredResponse;
     picklistValues;
 
@@ -15,7 +16,7 @@ export default class PicklistValues extends NavigationMixin(LightningElement) {
         type: 'standard__recordPage',
         attributes: {
             objectApiName: CASE_OBJECT.objectApiName,
-                 recordId: '500fj00001ABmSrAAL',
+                 recordId: this.recordId,
                actionName: 'view'
         }
     };
@@ -27,12 +28,13 @@ export default class PicklistValues extends NavigationMixin(LightningElement) {
                actionName: 'list'
         },
         state: {
-            filterName: 'AllAccounts'
+            filterName: 'MyAccounts'
         }
     };
 
     constructor() {
         super();
+        this.recordPageRef.attributes.recordId = '500fj00001ABmSrAAL';
     }
 
     connectedCallback() {
