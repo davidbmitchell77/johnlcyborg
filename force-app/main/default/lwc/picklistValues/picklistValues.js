@@ -11,12 +11,20 @@ export default class PicklistValues extends NavigationMixin(LightningElement) {
     _wiredResponse;
     picklistValues;
 
-    pageRef = {
+    recordPageRef = {
         type: 'standard__recordPage',
         attributes: {
-            objectApiName: CASE_OBJECT,
+            objectApiName: CASE_OBJECT.objectApiName,
                  recordId: '500fj00001ABmSrAAL',
                actionName: 'view'
+        }
+    };
+
+    objectPageRef = {
+        type: 'standard__objectPage',
+        attributes: {
+            objectApiName: 'Account',
+               actionName: 'list'
         }
     };
 
@@ -58,7 +66,10 @@ export default class PicklistValues extends NavigationMixin(LightningElement) {
         console.clear();
         switch (event.target.label) {
             case 'Go To Case Record':
-                this.gotoPage(this.pageRef);
+                this.gotoPage(this.recordPageRef);
+                break;
+            case 'Go To Account List':
+                this.gotoPage(this.objectPageRef);
                 break;
             case 'Show Toast':
                 this.showToast('Good Job!', 'You clicked the "Show Toast" button.');
@@ -77,12 +88,12 @@ export default class PicklistValues extends NavigationMixin(LightningElement) {
         )
        .catch(
             (error) => {
-                this.showToast('Error generating record page url!', error.body.message, 'error', 'pester');
+                this.showToast('Error generating page url!', error.body.message, 'error', 'pester');
                 console.error(error);
             }
         );
         try {
-            this[NavigationMixin.Navigate](this.pageRef);
+            this[NavigationMixin.Navigate](pageRef);
         }
         catch(error) {
             this.showToast('Error navigating to record page!', error.body.message, 'error', 'pester');
