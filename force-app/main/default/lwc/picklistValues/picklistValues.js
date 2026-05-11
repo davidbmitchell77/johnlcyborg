@@ -76,6 +76,9 @@ export default class PicklistValues extends NavigationMixin(LightningElement) {
             case 'Go To Account List':
                 this.gotoPage(this.objectPageRef);
                 break;
+            case 'Refresh Data':
+                this.refresh(this._wiredResponse);
+                break;
             case 'Show Toast':
                 this.showToast('Good Job!', 'You clicked the "Show Toast" button.');
                 break;
@@ -104,6 +107,21 @@ export default class PicklistValues extends NavigationMixin(LightningElement) {
             this.showToast('Error navigating to record page!', error.body.message, 'error', 'pester');
             console.error(error);
         }
+    }
+
+    refresh(data) {
+        refreshApex(data)
+       .then(
+            () => {
+                console.info('Data refresh was successful.');
+            }
+        )
+       .catch(
+            (error) => {
+                this.showToast('Error refreshing data!', error.body.message, 'error', 'pester');
+                console.error(error);
+            }
+        );
     }
 
     showToast(title, message, variant, mode) {
