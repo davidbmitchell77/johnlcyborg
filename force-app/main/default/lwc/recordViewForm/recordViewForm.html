@@ -1,0 +1,32 @@
+<template>
+    <lightning-card title="Account" icon-name="standard:account">
+        <div class="slds-var-m-around_medium">
+            <lightning-record-view-form object-api-name={objectApiName} record-id={recordId}>
+                <div class="slds-grid">
+                    <div class="slds-col slds-size_1_of2">
+                        <lightning-output-field field-name={fields.name}></lightning-output-field>
+                        <lightning-output-field field-name={fields.street}></lightning-output-field>
+                        <lightning-output-field field-name={fields.city}></lightning-output-field>
+                        <lightning-output-field field-name={fields.state}></lightning-output-field>
+                        <lightning-output-field field-name={fields.zip}></lightning-output-field>
+                        <lightning-output-field field-name={fields.country}></lightning-output-field>
+                    </div>
+                    <div class="slds-col slds-size_1_of2">
+                        <lightning-output-field field-name={fields.sic}></lightning-output-field>
+                        <lightning-output-field field-name={fields.dbNumber}></lightning-output-field>
+                        <lightning-output-field field-name={fields.dbName}></lightning-output-field>
+                    </div>
+                </div>
+            </lightning-record-view-form>
+        </div>
+        <div class="slds-var-m-around_medium">
+            <lightning-textarea class="custom-textarea" label="lightning-record-view-form" disabled style="--slds-c-textarea-sizing-min-height: 150px;" value={text}></lightning-textarea>
+        </div>
+        <div class="slds-var-m-around_medium">
+            <lightning-button variant="brand" onclick={handleClick} label="Home"            ></lightning-button>&nbsp;&nbsp;
+            <lightning-button variant="brand" onclick={handleClick} label="LWC Fundamentals"></lightning-button>&nbsp;&nbsp;
+            <lightning-button variant="brand" onclick={handleClick} label="Datatables"      ></lightning-button>&nbsp;&nbsp;
+            <lightning-button variant="brand" onclick={handleClick} label="Picklists"       ></lightning-button>
+        </div>
+    </lightning-card>
+</template>

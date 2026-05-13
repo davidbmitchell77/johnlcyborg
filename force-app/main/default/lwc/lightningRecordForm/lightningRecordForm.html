@@ -1,0 +1,25 @@
+<template>
+    <lightning-card title="Opportunity" icon-name="standard:opportunity">
+        <div class="slds-var-m-around_medium">
+            <lightning-record-form
+                object-api-name={objectApiName}
+                record-id={recordId}
+                fields={fields}
+                columns="2"
+                layout-type=""
+                mode="view"
+                onsubmit={handleSubmit}
+                onsuccess={handleSuccess}>
+            </lightning-record-form>
+        </div>
+        <div class="slds-var-m-around_medium">
+            <lightning-textarea class="custom-textarea" label="lightning-record-form" disabled style="--slds-c-textarea-sizing-min-height: 220px;" value={text}></lightning-textarea>
+        </div>
+        <div class="slds-var-m-around_medium">
+            <lightning-button variant="brand" onclick={handleClick} label="Home"            ></lightning-button>&nbsp;&nbsp;
+            <lightning-button variant="brand" onclick={handleClick} label="LWC Fundamentals"></lightning-button>&nbsp;&nbsp;
+            <lightning-button variant="brand" onclick={handleClick} label="Datatables"      ></lightning-button>&nbsp;&nbsp;
+            <lightning-button variant="brand" onclick={handleClick} label="Picklists"       ></lightning-button>
+        </div>
+    </lightning-card>
+</template>
