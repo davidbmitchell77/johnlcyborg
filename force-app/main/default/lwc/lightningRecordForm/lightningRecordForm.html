@@ -1,21 +1,45 @@
 <template>
     <lightning-card title="Opportunity" icon-name="standard:opportunity">
         <div class="slds-var-m-around_medium">
-            <lightning-record-form
-                object-api-name={objectApiName}
-                record-id={recordId}
-                fields={fields}
-                columns="2"
-                layout-type=""
-                mode="view"
-                onsubmit={handleSubmit}
-                onsuccess={handleSuccess}>
-            </lightning-record-form>
+            <div lwc:if={isCompact}>
+                <lightning-record-form
+                    object-api-name={objectApiName}
+                    record-id={recordId}
+                    columns="2"
+                    layout-type={layoutType}
+                    mode="view"
+                    onsubmit={handleSubmit}
+                    onsuccess={handleSuccess}>
+                </lightning-record-form>
+            </div>
+            <div lwc:elseif={isCustom}>
+                <lightning-record-form
+                    object-api-name={objectApiName}
+                    record-id={recordId}
+                    fields={fields}
+                    columns="2"
+                    mode="view"
+                    onsubmit={handleSubmit}
+                    onsuccess={handleSuccess}>
+                </lightning-record-form>
+            </div>
+            <div lwc:elseif={isFull}>
+                <lightning-record-form
+                    object-api-name={objectApiName}
+                    record-id={recordId}
+                    columns="2"
+                    layout-type={layoutType}
+                    mode="view"
+                    onsubmit={handleSubmit}
+                    onsuccess={handleSuccess}>
+                </lightning-record-form>
+            </div>
         </div>
         <div class="slds-var-m-around_medium">
             <lightning-textarea class="custom-textarea" label="lightning-record-form" disabled style="--slds-c-textarea-sizing-min-height: 220px;" value={text}></lightning-textarea>
         </div>
         <div class="slds-var-m-around_medium">
+            <lightning-radio-group label="Layout Type" options={options} value={value} onchange={handleChange} required></lightning-radio-group><br/>
             <lightning-button variant="brand" onclick={handleClick} label="Home"            ></lightning-button>&nbsp;&nbsp;
             <lightning-button variant="brand" onclick={handleClick} label="LWC Fundamentals"></lightning-button>&nbsp;&nbsp;
             <lightning-button variant="brand" onclick={handleClick} label="Datatables"      ></lightning-button>&nbsp;&nbsp;

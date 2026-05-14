@@ -27,12 +27,28 @@ export default class LightningRecordForm extends NavigationMixin(LightningElemen
     objectApiName;
     recordId;
     fields;
+    options;
+    value;
+    layoutType;
+    value;
 
     constructor() {
         super();
-        this.objectApiName = OPPORTUNITY.objectApiName;
+        this.objectApiName = OPPORTUNITY;
         this.recordId = '006fj000008e5etAAA';
         this.fields = FIELDS;
+        this.layoutType = 'Compact';
+        this.value = this.layoutType;
+        this.options = [
+            { label: 'Full',    value: 'Full'    },
+            { label: 'Compact', value: 'Compact' },
+            { label: 'Custom',  value: 'Custom'  }
+        ];
+    }
+
+    handleChange(event) {
+        this.layoutType = event.detail.value;
+        console.info(event);
     }
 
     handleSubmit(event) {
@@ -112,6 +128,18 @@ export default class LightningRecordForm extends NavigationMixin(LightningElemen
                 apiName: pageApiName
             }
         };
+    }
+
+    get isCompact() {
+        return (this.layoutType == 'Compact');
+    }
+
+    get isCustom() {
+        return (this.layoutType == 'Custom');
+    }
+
+    get isFull() {
+        return (this.layoutType == 'Full');
     }
 
     get text() {
